@@ -1,0 +1,3 @@
+(tests
+ (names testTokenize)
+ (libraries tokenize oUnit))
