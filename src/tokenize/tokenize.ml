@@ -1,5 +1,7 @@
 open TokenTypes
 
+module TokenTypes = TokenTypes
+
 let regexps =
   [ (Str.regexp "[[({]", fun _ -> LParen)
   ; (Str.regexp "[])}]", fun _ -> RParen)
