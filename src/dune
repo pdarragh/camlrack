@@ -1,4 +1,4 @@
 (library
  (name camlrack)
- (modules types camlrack)
- (libraries tokenize))
+ (modules camlrack)
+ (libraries tokenize parse))
