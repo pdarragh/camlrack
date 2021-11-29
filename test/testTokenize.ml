@@ -6,7 +6,11 @@ open Tokenize.TokenTypes
 let full_string_of_token (t : token) : string =
   match t with
   | LParen -> "LParen"
+  | LBrace -> "LBrace"
+  | LBracket -> "LBracket"
   | RParen -> "RParen"
+  | RBrace -> "RBrace"
+  | RBracket -> "RBracket"
   | Integer i ->
     if i < 0
     then "Integer (" ^ string_of_int i ^ ")"
@@ -22,8 +26,8 @@ let test_tokenize (input, tokens : string * token list) _ =
 let simple_test_inputs =
   [ ("", [])
   ; ("()", [LParen; RParen])
-  ; ("[]", [LParen; RParen])
-  ; ("{}", [LParen; RParen])
+  ; ("{}", [LBrace; RBrace])
+  ; ("[]", [LBracket; RBracket])
   ; ("0", [Integer 0])
   ; ("-42", [Integer (-42)])
   ; ("foo", [Symbol "foo"])

@@ -3,8 +3,12 @@ open TokenTypes
 module TokenTypes = TokenTypes
 
 let regexps =
-  [ (Str.regexp "[[({]", fun _ -> LParen)
-  ; (Str.regexp "[])}]", fun _ -> RParen)
+  [ (Str.regexp "(", fun _ -> LParen)
+  ; (Str.regexp "{", fun _ -> LBrace)
+  ; (Str.regexp "\\[", fun _ -> LBracket)
+  ; (Str.regexp ")", fun _ -> RParen)
+  ; (Str.regexp "}", fun _ -> RBrace)
+  ; (Str.regexp "]", fun _ -> RBracket)
   ; (Str.regexp "-?[0-9]+", (fun s -> Integer (int_of_string s)))
   ; (Str.regexp "[^])}[({ \t\n0-9][^])}[({ \t\n]*", (fun s -> Symbol s))
   ]
