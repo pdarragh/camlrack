@@ -5,13 +5,18 @@ open Parse
 open Parse.Sexp
 
 let test_parse (input, sexp : string * sexp) _ =
-  assert_equal sexp (parse (tokenize input))
+  assert_equal (Some sexp) (parse (tokenize input))
 
 let parse_tests =
-  [ ("123", Sexp [Integer 123])
-  ; ("foo", Sexp [Symbol "foo"])
+  [ ("123", Integer 123)
+  ; ("foo", Symbol "foo")
   ; ("(foo (bar baz) quux)",
-    (Sexp [Sexp [Symbol "foo"; Sexp [Symbol "bar"; Symbol "baz"]; Symbol "quux"]]))
+     Sexp
+       [ Symbol "foo"
+       ; Sexp
+           [ Symbol "bar"
+           ; Symbol "baz" ]
+       ; Symbol "quux" ])
   ]
 
 let tests =
