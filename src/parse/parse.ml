@@ -24,7 +24,7 @@ let string_of_sexp_list (sexps : sexp list) : string =
 let string_of_sexp_list_list (sexpss : sexp list list) : string =
   "[" ^ String.concat "; " (List.map string_of_sexp_list sexpss) ^ "]"
 
-let parse (tokens : token list) : sexp list option =
+let parse (tokens : token list) : sexp option =
   let rec parse' (tokens : token list) (braces : token list) (stack : sexp list list) : sexp list option =
     match tokens with
     | [] ->
@@ -47,4 +47,8 @@ let parse (tokens : token list) : sexp list option =
        | Integer i -> parse' tokens braces ((List.hd stack @ [Integer i]) :: (List.tl stack))
        | Symbol s -> parse' tokens braces ((List.hd stack @ [Symbol s]) :: (List.tl stack)))
   in
-  parse' tokens [] [[]]
+  match parse' tokens [] [[]] with
+  | None -> None
+  | Some [] -> None
+  | Some [s] -> Some s
+  | _   -> failwith "found multiple parses"
