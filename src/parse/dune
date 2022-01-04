@@ -1,4 +1,0 @@
-(library
- (name parse)
- (modules sexp parse)
- (libraries tokenize))

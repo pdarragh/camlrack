@@ -1,8 +1,8 @@
 open OUnit2
 
-open Tokenize
-open Parse
-open Parse.Sexp
+open Camlrack.Tokenize
+open Camlrack.Parse
+open Camlrack.Parse.Sexp
 
 let test_parse (input, sexp : string * sexp) _ =
   assert_equal (Some sexp) (parse (tokenize input))

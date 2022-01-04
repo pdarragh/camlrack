@@ -1,7 +1,7 @@
 open OUnit2
 
-open Tokenize
-open Tokenize.TokenTypes
+open Camlrack.Tokenize
+open Camlrack.Tokenize.TokenTypes
 
 let full_string_of_token (t : token) : string =
   match t with
