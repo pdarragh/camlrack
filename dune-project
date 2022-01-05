@@ -17,3 +17,15 @@ S-expressions and vice versa. It is intended to be simple and minimal, yet
 fully-featured.")
  (depends (ocaml (>= 4.12)))
  (tags ("S-expressions" "parsing")))
+
+(package
+ (name ppx_camlrack)
+ (version 0.0.1)
+ (synopsis "PPX for matching S-Expressions")
+ (description "'PPX-Camlrack' provides an augmented match expression that
+transforms written S-expressions into their Camlrack-compatible types. This
+allows for easily working with S-expressions without extra typing.")
+ (depends
+  (ocaml (>= 4.12))
+  (ppxlib (>= 0.23.0))
+  (camlrack (>= 0.1.0))))
