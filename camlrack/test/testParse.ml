@@ -1,11 +1,10 @@
 open OUnit2
 
-open Camlrack.Tokenize
 open Camlrack.Parse
 open Camlrack.Parse.Sexp
 
 let test_parse (input, sexp : string * sexp) _ =
-  assert_equal (Some sexp) (parse (tokenize input))
+  assert_equal sexp (parse_exn input)
 
 let parse_tests =
   [ ("123", Integer 123)

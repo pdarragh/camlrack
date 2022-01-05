@@ -1,4 +1,5 @@
 open Sexp
+open Tokenize
 open Tokenize.TokenTypes
 
 module Sexp = Sexp
@@ -24,7 +25,7 @@ let string_of_sexp_list (sexps : sexp list) : string =
 let string_of_sexp_list_list (sexpss : sexp list list) : string =
   "[" ^ String.concat "; " (List.map string_of_sexp_list sexpss) ^ "]"
 
-let parse (tokens : token list) : sexp option =
+let parse_tokens (tokens : token list) : sexp option =
   let rec parse' (tokens : token list) (braces : token list) (stack : sexp list list) : sexp list option =
     match tokens with
     | [] ->
@@ -34,7 +35,7 @@ let parse (tokens : token list) : sexp option =
           | [] -> None
           | [ss] -> Some ss
           | ss::ss'::stack -> parse' tokens braces ((ss' @ [Sexp ss])::stack))
-       | _ -> failwith "unterminated s-expression")
+       | _ -> failwith "unterminated S-expression")
     | token::tokens ->
       (match token with
        | LParen | LBrace | LBracket -> parse' tokens (token::braces) ([]::stack)
@@ -52,3 +53,12 @@ let parse (tokens : token list) : sexp option =
   | Some [] -> None
   | Some [s] -> Some s
   | _   -> failwith "found multiple parses"
+
+let parse_tokens_exn (tokens : token list) : sexp =
+  match parse_tokens tokens with
+  | Some s -> s
+  | None -> failwith "could not parse S-expression"
+
+let parse (s : string) : sexp option = tokenize s |> parse_tokens
+
+let parse_exn (s : string) : sexp = tokenize s |> parse_tokens_exn
