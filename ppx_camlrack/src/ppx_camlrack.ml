@@ -1,10 +1,11 @@
 open Ppxlib
 
-let process_pattern ~ctxt (p : pattern) =
+let rec process_pattern ~ctxt (p : pattern) =
   let loc = Expansion_context.Extension.extension_point_loc ctxt in
   let open Ast_builder.Default in
   match p.ppat_desc with
   | Ppat_var varname -> [%pat? Camlrack.Symbol [%p ppat_var ~loc varname]]
+  | Ppat_tuple pats -> [%pat? Camlrack.Sexp [%p plist ~loc (List.map (process_pattern ~ctxt) pats)]]
   | _ -> p
 
 let process_case ~ctxt case =
@@ -12,7 +13,7 @@ let process_case ~ctxt case =
 
 let expand ~ctxt e =
   let loc = Expansion_context.Extension.extension_point_loc ctxt in
-  let expand_cases cases = cases |> List.map (process_case ~ctxt) in
+  let expand_cases cases = List.map (process_case ~ctxt) cases in
   let open Ast_helper.Exp in
   match e.pexp_desc with
   | Pexp_function cases -> function_ ~loc (expand_cases cases)
