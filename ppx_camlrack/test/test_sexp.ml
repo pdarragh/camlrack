@@ -3,5 +3,7 @@ let test_match () =
   match%sexp sexp_of_string_exn "foo" with
   | (lhs, rhs) -> "tuple: " ^ (lhs ^ rhs)
   | (lhs, (ilhs, irhs)) -> "nested tuple: " ^ (lhs ^ (ilhs ^ irhs))
+  | "((ilhs irhs) rhs)" -> "string sexp: " ^ (ilhs ^ (irhs ^ rhs))
+  | "(1 foo)" -> "string sexp with integer: " ^ foo
   | foo -> "variable: " ^ foo
   | _ -> "no match"

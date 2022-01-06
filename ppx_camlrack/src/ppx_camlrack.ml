@@ -1,4 +1,5 @@
 open Ppxlib
+open Ppx_sexp
 
 let rec process_pattern ~ctxt (p : pattern) =
   let loc = Expansion_context.Extension.extension_point_loc ctxt in

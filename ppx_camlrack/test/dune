@@ -4,13 +4,22 @@
  (libraries ppx_camlrack ppxlib))
 
 (rule
- (targets test.actual.ml)
- (deps (:pp pp.exe) (:input test.ml))
+ (targets test_sexp.actual.ml)
+ (deps (:pp pp.exe) (:input test_sexp.ml))
  (action (run ./%{pp} --impl %{input} -o %{targets})))
 
 (rule
  (alias runtest)
+ (action (diff test_sexp.expected.ml test_sexp.actual.ml)))
+
+(rule
+ (alias runtest)
  (action (diff test.expected.ml test.actual.ml)))
+(test
+ (name test_sexp)
+ (modules test_sexp)
+ (libraries camlrack)
+ (preprocess (pps ppx_camlrack)))
 
 (test
  (name test)
