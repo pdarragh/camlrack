@@ -16,6 +16,14 @@ let parse_tests =
            [ Symbol "bar"
            ; Symbol "baz" ]
        ; Symbol "quux" ])
+  ; ("{lambda {SYMBOL ...} ANY ...}",
+     Sexp
+       [ Symbol "lambda"
+       ; Sexp
+           [ Symbol "SYMBOL"
+           ; Symbol "..." ]
+       ; Symbol "ANY"
+       ; Symbol "..." ])
   ]
 
 let tests =

@@ -2,6 +2,7 @@ include Sexp
 
 module Tokenize = Tokenize
 module Parse = Parse
+module Match = Match
 
 let sexp_of_string (s : string) : sexp option = Parse.parse s
 
