@@ -46,16 +46,13 @@ let rec pattern_to_sexp_pat (p : pattern) : pattern option =
     (match Camlrack.sexp_of_string s with
      | Some se -> Some (convert_sexp ~loc se)
      | None -> None)
-  (* If not a string literal, we will convert variables/constants/tuples to
-     S-Expressions manually. *)
-  | Ppat_var {txt = name; loc = loc} ->
-    Some [%pat? Camlrack.Symbol [%p ppat_var ~loc {txt = name; loc = loc}]]
   (* An or-pattern is just handled recursively. *)
   | Ppat_or (p1, p2) ->
     (match pattern_to_sexp_pat p1, pattern_to_sexp_pat p2 with
      | Some p1', Some p2' -> Some (ppat_or ~loc:p.ppat_loc p1' p2')
      | _ -> None)
-  (* In any other case, we do not convert to an S-Expression. *)
+  (* If not a string literal, we will convert variables/constants/tuples to
+     S-Expressions manually. *)
   | _ -> convert_pat p
 
 let rec process_pattern (p : pattern) =
