@@ -15,7 +15,7 @@ let sexp_match (p : sexp_pattern) (se : sexp) : bool =
     | Integer i1, Integer i2 -> i1 = i2
     | Float f1, Float f2 -> f1 = f2
     | String s1, String s2 -> s1 = s2
-    | SPat pats, Sexp sexps -> list_match pats sexps
+    | SPat pats, SExp sexps -> list_match pats sexps
     | _ -> false
   and list_match (ps : sexp_pattern list) (ses : sexp list) : bool =
     match ps, ses with

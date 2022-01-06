@@ -39,7 +39,7 @@ let rec sexp_pattern_of_sexp (sexp : sexp) : sexp_pattern =
   | Integer i -> Integer i
   | Float f -> Float f
   | String s -> String s
-  | Sexp sexps -> SPat (List.map sexp_pattern_of_sexp sexps)
+  | SExp sexps -> SPat (List.map sexp_pattern_of_sexp sexps)
 
 let list_of_sexp_pattern (pat : sexp_pattern) : sexp_pattern list =
   match pat with

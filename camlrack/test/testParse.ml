@@ -14,16 +14,16 @@ let parse_tests =
   ; ("13.e-1", Float 1.3)
   ; ("foo", Symbol "foo")
   ; ("(foo (bar baz) quux)",
-     Sexp
+     SExp
        [ Symbol "foo"
-       ; Sexp
+       ; SExp
            [ Symbol "bar"
            ; Symbol "baz" ]
        ; Symbol "quux" ])
   ; ("{lambda {SYMBOL ...} ANY ...}",
-     Sexp
+     SExp
        [ Symbol "lambda"
-       ; Sexp
+       ; SExp
            [ Symbol "SYMBOL"
            ; Symbol "..." ]
        ; Symbol "ANY"

@@ -29,7 +29,7 @@ let parse_tokens_multiple (tokens : token list) : sexp list =
       (match braces with
        | [] ->
          (match stack with
-          | ss::ss'::stack -> parse' tokens braces ((ss' @ [Sexp ss])::stack)
+          | ss::ss'::stack -> parse' tokens braces ((ss' @ [SExp ss])::stack)
           | _ -> List.flatten stack)
        | _ -> failwith "unterminated S-expression")
     | token::tokens ->
@@ -39,7 +39,7 @@ let parse_tokens_multiple (tokens : token list) : sexp list =
          (match braces with
           | [] -> failwith "unexpected closing brace"
           | brace::braces when braces_match brace token ->
-            parse' tokens braces (((List.hd (List.tl stack)) @ [Sexp (List.hd stack)]) :: (List.tl (List.tl stack)))
+            parse' tokens braces (((List.hd (List.tl stack)) @ [SExp (List.hd stack)]) :: (List.tl (List.tl stack)))
           | _ -> failwith "mismatched braces")
        | Integer i -> parse' tokens braces ((List.hd stack @ [Integer i]) :: (List.tl stack))
        | Float f -> parse' tokens braces ((List.hd stack @ [Float f]) :: (List.tl stack))
