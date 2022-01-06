@@ -1,8 +1,5 @@
-open Sexp
 open Tokenize
-open Tokenize.TokenTypes
-
-module Sexp = Sexp
+include Sexp
 
 let push (buffer : 'a list ref) (elem : 'a) : unit =
   buffer := elem::!buffer
@@ -25,16 +22,15 @@ let string_of_sexp_list (sexps : sexp list) : string =
 let string_of_sexp_list_list (sexpss : sexp list list) : string =
   "[" ^ String.concat "; " (List.map string_of_sexp_list sexpss) ^ "]"
 
-let parse_tokens (tokens : token list) : sexp option =
-  let rec parse' (tokens : token list) (braces : token list) (stack : sexp list list) : sexp list option =
+let parse_tokens_multiple (tokens : token list) : sexp list =
+  let rec parse' (tokens : token list) (braces : token list) (stack : sexp list list) : sexp list =
     match tokens with
     | [] ->
       (match braces with
        | [] ->
          (match stack with
-          | [] -> None
-          | [ss] -> Some ss
-          | ss::ss'::stack -> parse' tokens braces ((ss' @ [Sexp ss])::stack))
+          | ss::ss'::stack -> parse' tokens braces ((ss' @ [Sexp ss])::stack)
+          | _ -> List.flatten stack)
        | _ -> failwith "unterminated S-expression")
     | token::tokens ->
       (match token with
@@ -46,12 +42,16 @@ let parse_tokens (tokens : token list) : sexp option =
             parse' tokens braces (((List.hd (List.tl stack)) @ [Sexp (List.hd stack)]) :: (List.tl (List.tl stack)))
           | _ -> failwith "mismatched braces")
        | Integer i -> parse' tokens braces ((List.hd stack @ [Integer i]) :: (List.tl stack))
+       | Float f -> parse' tokens braces ((List.hd stack @ [Float f]) :: (List.tl stack))
+       | String s -> parse' tokens braces ((List.hd stack @ [String s]) :: (List.tl stack))
        | Symbol s -> parse' tokens braces ((List.hd stack @ [Symbol s]) :: (List.tl stack)))
   in
-  match parse' tokens [] [[]] with
-  | None -> None
-  | Some [] -> None
-  | Some [s] -> Some s
+  parse' tokens [] [[]]
+
+let parse_tokens (tokens : token list) : sexp option =
+  match parse_tokens_multiple tokens with
+  | [] -> None
+  | [s] -> Some s
   | _   -> failwith "found multiple parses"
 
 let parse_tokens_exn (tokens : token list) : sexp =

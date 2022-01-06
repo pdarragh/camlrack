@@ -3,13 +3,18 @@ include SexpPatterns
 
 let sexp_match (p : sexp_pattern) (se : sexp) : bool =
   let rec sexp_match (p : sexp_pattern) (se : sexp) : bool =
-    (* print_endline ("matching pattern " ^ string_of_sexp_pattern p ^ " with S-expression " ^ string_of_sexp se); *)
     match p, se with
     | SYMBOL, Symbol _ -> true
     | NUMBER, Integer _ -> true
+    | NUMBER, Float _ -> true
+    | INTEGER, Integer _ -> true
+    | FLOAT, Float _ -> true
+    | STRING, String _ -> true
     | ANY, _ -> true
     | Symbol s1, Symbol s2 -> s1 = s2
-    | Number i1, Integer i2 -> i1 = i2
+    | Integer i1, Integer i2 -> i1 = i2
+    | Float f1, Float f2 -> f1 = f2
+    | String s1, String s2 -> s1 = s2
     | SPat pats, Sexp sexps -> list_match pats sexps
     | _ -> false
   and list_match (ps : sexp_pattern list) (ses : sexp list) : bool =

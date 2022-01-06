@@ -1,6 +1,4 @@
-open TokenTypes
-
-module TokenTypes = TokenTypes
+include TokenTypes
 
 let regexps =
   [ (Str.regexp "(", fun _ -> LParen)
@@ -9,7 +7,10 @@ let regexps =
   ; (Str.regexp ")", fun _ -> RParen)
   ; (Str.regexp "}", fun _ -> RBrace)
   ; (Str.regexp "]", fun _ -> RBracket)
-  ; (Str.regexp "-?[0-9]+", (fun s -> Integer (int_of_string s)))
+  ; (Str.regexp "[-+]?[0-9]+\\.[0-9]*\\([eE][-+]?[0-9]+\\)?", (fun s -> Float (float_of_string s)))
+  ; (Str.regexp "[-+]?[0-9]+[eE][-+]?[0-9]+", (fun s -> Float (float_of_string s)))
+  ; (Str.regexp "[-+]?[0-9]+", (fun s -> Integer (int_of_string s)))
+  ; (Str.regexp {r|"[^"]*"|r}, (fun s -> String (String.sub s 1 ((String.length s) - 2))))
   ; (Str.regexp "[^])}[({ \t\n0-9][^])}[({ \t\n]*", (fun s -> Symbol s))
   ]
 

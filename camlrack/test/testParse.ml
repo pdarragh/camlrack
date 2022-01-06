@@ -1,13 +1,17 @@
 open OUnit2
 
 open Camlrack.Parse
-open Camlrack.Parse.Sexp
 
 let test_parse (input, sexp : string * sexp) _ =
   assert_equal sexp (parse_exn input)
 
 let parse_tests =
   [ ("123", Integer 123)
+  ; ("-10", Integer (-10))
+  ; ("123.", Float 123.)
+  ; ("-123.", Float (-123.))
+  ; ("1e1", Float 10.)
+  ; ("13.e-1", Float 1.3)
   ; ("foo", Symbol "foo")
   ; ("(foo (bar baz) quux)",
      Sexp
