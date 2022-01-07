@@ -13,3 +13,9 @@ let test_match () =
       "string sexp with integer: " ^ foo
   | Camlrack.Symbol foo -> "variable: " ^ foo
   | _ -> "no match"
+let test_at =
+  Camlrack.SExp
+    [Camlrack.Symbol "foo";
+    Camlrack.Integer 1;
+    Camlrack.SExp
+      [Camlrack.Symbol "+"; Camlrack.Float 2.; Camlrack.Symbol "x"]]

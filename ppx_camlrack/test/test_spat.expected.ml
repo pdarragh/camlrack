@@ -1,6 +1,11 @@
 open Camlrack.Match
 let test_match (_ : sexp) (_ : sexp_pattern) =
-  let sexp = Camlrack.sexp_of_string_exn "(lambda (x y) (+ x y))" in
+  let sexp =
+    Camlrack.SExp
+      [Camlrack.Symbol "lambda";
+      Camlrack.SExp [Camlrack.Symbol "x"; Camlrack.Symbol "y"];
+      Camlrack.SExp
+        [Camlrack.Symbol "+"; Camlrack.Symbol "x"; Camlrack.Symbol "y"]] in
   if
     Camlrack.Match.sexp_match
       (Camlrack.Match.SPat
@@ -10,4 +15,12 @@ let test_match (_ : sexp) (_ : sexp_pattern) =
          Camlrack.Match.ANY;
          Camlrack.Match.Symbol "..."]) sexp
   then sexp
-  else sexp
+  else
+    if
+      Camlrack.Match.sexp_match
+        (Camlrack.Match.SPat
+           [Camlrack.Match.Symbol "+";
+           Camlrack.Match.NUMBER;
+           Camlrack.Match.NUMBER]) sexp
+    then sexp
+    else sexp
