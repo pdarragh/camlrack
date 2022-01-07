@@ -1,50 +1,54 @@
 open Camlrack.Match
 open Ppxlib
 
-(* TODO: Return an option, do the full processing here. *)
-let process_scrutinee ~ctxt (e : expression) : expression =
-  let loc = Expansion_context.Extension.extension_point_loc ctxt in
+let process_scrutinee (e : expression) : expression =
   let open Ast_builder.Default in
-  match e.pexp_desc with
-  | Pexp_constant (Pconst_string (s, _, _)) ->
-    [%expr Camlrack.sexp_of_string_exn [%e estring ~loc s]]
-  | _ -> e
-
-let pattern_to_sexp_pattern_exp (p : pattern) : expression option =
-  let open Ast_builder.Default in
-  let rec convert_pat (p : pattern) : expression option =
-    let loc = p.ppat_loc in
-    match p.ppat_desc with
+  let rec convert_exp (e : expression) : expression option =
+    let loc = e.pexp_loc in
+    match e.pexp_desc with
     (* Constants are trivially converted to matching constants. *)
-    | Ppat_constant (Pconst_char c) ->
-      Some [%expr Camlrack.Match.String [%e estring ~loc (String.make 1 c)]]
-    | Ppat_constant (Pconst_string (s, loc, _)) ->
-      Some [%expr Camlrack.Match.String [%e estring ~loc s]]
-    | Ppat_constant (Pconst_integer (s, None)) ->
-      Some [%expr Camlrack.Match.Integer [%e pexp_constant ~loc (Pconst_integer (s, None))]]
-    | Ppat_constant (Pconst_float (s, None)) ->
-      Some [%expr Camlrack.Match.Float [%e efloat ~loc s]]
-    (* Variables are checked to see if they're one of the special symbols. *)
-    | Ppat_var {txt = name; loc = loc} ->
-      (match name with
-       | "SYMBOL" -> Some [%expr Camlrack.Match.SYMBOL]
-       | "NUMBER" -> Some [%expr Camlrack.Match.NUMBER]
-       | "INTEGER" -> Some [%expr Camlrack.Match.INTEGER]
-       | "FLOAT" -> Some [%expr Camlrack.Match.FLOAT]
-       | "STRING" -> Some [%expr Camlrack.Match.STRING]
-       | "ANY" -> Some [%expr Camlrack.Match.ANY]
-       | _ -> Some [%expr Camlrack.Match.Symbol [%e estring ~loc name]])
+    | Pexp_constant (Pconst_char c) ->
+      Some [%expr Camlrack.String [%e estring ~loc (String.make 1 c)]]
+    | Pexp_constant (Pconst_string (s, loc, _)) ->
+      Some [%expr Camlrack.String [%e estring ~loc s]]
+    | Pexp_constant (Pconst_integer (s, None)) ->
+      Some [%expr Camlrack.Integer [%e pexp_constant ~loc (Pconst_integer (s, None))]]
+    | Pexp_constant (Pconst_float (s, None)) ->
+      Some [%expr Camlrack.Float [%e efloat ~loc s]]
+    (* Variables are assumed to be literal symbols. *)
+    | Pexp_ident {txt = (Lident name); loc = loc} ->
+      Some [%expr Camlrack.Symbol [%e estring ~loc name]]
     (* Tuples are converted recursively. *)
-    | Ppat_tuple pats ->
-      let converted_exps = List.map convert_pat pats in
+    | Pexp_tuple exps ->
+      let converted_exps = List.map convert_exp exps in
       if List.for_all Option.is_some converted_exps
       then
-        let exps = List.map Option.get converted_exps in
-        Some [%expr Camlrack.Match.SPat [%e elist ~loc exps]]
+        let exps' = List.map Option.get converted_exps in
+        Some [%expr Camlrack.SExp [%e elist ~loc exps']]
       else
         None
     (* Anything else is not converted. *)
     | _ -> None in
+  let rec convert_sexp ~loc (s : sexp) : expression =
+    match s with
+    | Integer i -> [%expr Camlrack.Integer [%e eint ~loc i]]
+    | Float f -> [%expr Camlrack.Float [%e efloat ~loc (string_of_float f)]]
+    | String s -> [%expr Camlrack.String [%e estring ~loc s]]
+    | Symbol s -> [%expr Camlrack.Symbol [%e estring ~loc s]]
+    | SExp ses -> [%expr Camlrack.SExp [%e elist ~loc (List.map (convert_sexp ~loc) ses)]]
+  in
+  match e.pexp_desc with
+  | Pexp_constant (Pconst_string (s, loc, _)) ->
+    (match Camlrack.sexp_of_string s with
+     | Some se -> convert_sexp ~loc se
+     | None -> e)
+  | _ ->
+    (match convert_exp e with
+     | Some ne -> ne
+     | None -> e)
+
+let pattern_to_sexp_pattern_exp (p : pattern) : expression option =
+  let open Ast_builder.Default in
   let rec convert_sexp_pattern ~loc (pat : sexp_pattern) : expression =
     match pat with
     | SYMBOL -> [%expr Camlrack.Match.SYMBOL]
@@ -64,12 +68,12 @@ let pattern_to_sexp_pattern_exp (p : pattern) : expression option =
     (match Camlrack.sexp_of_string s with
      | Some se -> Some (convert_sexp_pattern ~loc (sexp_pattern_of_sexp se))
      | None -> None)
-  | _ -> convert_pat p
+  | _ -> None
 
 let build_if_chain ~ctxt (s : expression) (cs : case list) : expression option =
   let loc = Expansion_context.Extension.extension_point_loc ctxt in
   let open Ast_builder.Default in
-  let input_sexp = process_scrutinee ~ctxt s in
+  let input_sexp = process_scrutinee s in
   let process_nonfinal_case (c : case) (else_expr: expression) : expression option =
     let loc = c.pc_lhs.ppat_loc in
     (match c.pc_lhs.ppat_desc with
@@ -126,9 +130,9 @@ let build_if_chain ~ctxt (s : expression) (cs : case list) : expression option =
 let expand_spat ~ctxt e =
   let _ = Expansion_context.Extension.extension_point_loc ctxt in
   match e.pexp_desc with
-  | Pexp_match (e, cases) ->
+  | Pexp_match (scrut, cases) ->
     (* Only replace the match-expression if we are successful. *)
-    (match build_if_chain ~ctxt e cases with
+    (match build_if_chain ~ctxt scrut cases with
      | Some expr -> expr
      | None -> e)
   | _ -> e
