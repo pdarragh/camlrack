@@ -16,4 +16,4 @@ let rec string_of_sexp (s : sexp) : string =
 let list_of_sexp (s : sexp) : sexp list =
   match s with
   | SExp sexps -> sexps
-  | _ -> failwith "not a list"
+  | _ -> failwith ("S-Expression is not a list: " ^ string_of_sexp s)
