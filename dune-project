@@ -10,7 +10,7 @@
 
 (package
  (name camlrack)
- (version 0.1.0)
+ (version 0.9.0)
  (synopsis "S-Expression parsing for OCaml")
  (description "'Camlrack' provides the ability to parse strings into
 S-expressions and vice versa. It is intended to be simple and minimal, yet
@@ -20,7 +20,7 @@ fully-featured.")
 
 (package
  (name ppx_camlrack)
- (version 0.0.1)
+ (version 0.9.0)
  (synopsis "PPX for matching S-Expressions")
  (description "'PPX-Camlrack' provides an augmented match expression that
 transforms written S-expressions into their Camlrack-compatible types. This
@@ -28,4 +28,4 @@ allows for easily working with S-expressions without extra typing.")
  (depends
   (ocaml (>= 4.12))
   (ppxlib (>= 0.23.0))
-  (camlrack (>= 0.1.0))))
+  (camlrack (>= 0.9.0))))
