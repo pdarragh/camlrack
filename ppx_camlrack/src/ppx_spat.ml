@@ -1,51 +1,11 @@
+open Common
 open Camlrack.Match
 open Ppxlib
 
 let process_scrutinee (e : expression) : expression =
-  let open Ast_builder.Default in
-  let rec convert_exp (e : expression) : expression option =
-    let loc = e.pexp_loc in
-    match e.pexp_desc with
-    (* Constants are trivially converted to matching constants. *)
-    | Pexp_constant (Pconst_char c) ->
-      Some [%expr Camlrack.String [%e estring ~loc (String.make 1 c)]]
-    | Pexp_constant (Pconst_string (s, loc, _)) ->
-      Some [%expr Camlrack.String [%e estring ~loc s]]
-    | Pexp_constant (Pconst_integer (s, None)) ->
-      Some [%expr Camlrack.Integer [%e pexp_constant ~loc (Pconst_integer (s, None))]]
-    | Pexp_constant (Pconst_float (s, None)) ->
-      Some [%expr Camlrack.Float [%e efloat ~loc s]]
-    (* Variables are assumed to be literal symbols. *)
-    | Pexp_ident {txt = (Lident name); loc = loc} ->
-      Some [%expr Camlrack.Symbol [%e estring ~loc name]]
-    (* Tuples are converted recursively. *)
-    | Pexp_tuple exps ->
-      let converted_exps = List.map convert_exp exps in
-      if List.for_all Option.is_some converted_exps
-      then
-        let exps' = List.map Option.get converted_exps in
-        Some [%expr Camlrack.SExp [%e elist ~loc exps']]
-      else
-        None
-    (* Anything else is not converted. *)
-    | _ -> None in
-  let rec convert_sexp ~loc (s : sexp) : expression =
-    match s with
-    | Integer i -> [%expr Camlrack.Integer [%e eint ~loc i]]
-    | Float f -> [%expr Camlrack.Float [%e efloat ~loc (string_of_float f)]]
-    | String s -> [%expr Camlrack.String [%e estring ~loc s]]
-    | Symbol s -> [%expr Camlrack.Symbol [%e estring ~loc s]]
-    | SExp ses -> [%expr Camlrack.SExp [%e elist ~loc (List.map (convert_sexp ~loc) ses)]]
-  in
-  match e.pexp_desc with
-  | Pexp_constant (Pconst_string (s, loc, _)) ->
-    (match Camlrack.sexp_of_string s with
-     | Some se -> convert_sexp ~loc se
-     | None -> e)
-  | _ ->
-    (match convert_exp e with
-     | Some ne -> ne
-     | None -> e)
+  match sexp_exp_of_expression e with
+  | Some ne -> ne
+  | None -> e
 
 let pattern_to_sexp_pattern_exp (p : pattern) : expression option =
   let open Ast_builder.Default in
