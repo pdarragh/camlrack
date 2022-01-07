@@ -17,17 +17,17 @@ let sexp_match (p : sexp_pattern) (se : sexp) : bool =
     | FLOAT, Float _ -> true
     | STRING, String _ -> true
     | ANY, _ -> true
-    | Symbol s1, Symbol s2 -> s1 = s2
-    | Integer i1, Integer i2 -> i1 = i2
-    | Float f1, Float f2 -> f1 = f2
-    | String s1, String s2 -> s1 = s2
+    | PSymbol s1, Symbol s2 -> s1 = s2
+    | PInteger i1, Integer i2 -> i1 = i2
+    | PFloat f1, Float f2 -> f1 = f2
+    | PString s1, String s2 -> s1 = s2
     | SPat pats, SExp sexps -> list_match pats sexps
     | _ -> false
   and list_match (ps : sexp_pattern list) (ses : sexp list) : bool =
     match ps, ses with
     | [], [] -> true
     | [], _ -> false
-    | p :: Symbol "..." :: ps', _ ->
+    | p :: PSymbol "..." :: ps', _ ->
       if ((List.length ps) - 2) = List.length ses
       then list_match ps' ses
       else if ses = []

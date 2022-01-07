@@ -17,10 +17,10 @@ let pattern_to_sexp_pattern_exp (p : pattern) : expression option =
     | FLOAT -> [%expr Camlrack.Match.FLOAT]
     | STRING -> [%expr Camlrack.Match.STRING]
     | ANY -> [%expr Camlrack.Match.ANY]
-    | Integer i -> [%expr Camlrack.Match.Integer [%e eint ~loc i]]
-    | Float f -> [%expr Camlrack.Match.Float [%e efloat ~loc (string_of_float f)]]
-    | String s -> [%expr Camlrack.Match.String [%e estring ~loc s]]
-    | Symbol s -> [%expr Camlrack.Match.Symbol [%e estring ~loc s]]
+    | PInteger i -> [%expr Camlrack.Match.PInteger [%e eint ~loc i]]
+    | PFloat f -> [%expr Camlrack.Match.PFloat [%e efloat ~loc (string_of_float f)]]
+    | PString s -> [%expr Camlrack.Match.PString [%e estring ~loc s]]
+    | PSymbol s -> [%expr Camlrack.Match.PSymbol [%e estring ~loc s]]
     | SPat pats -> [%expr Camlrack.Match.SPat [%e elist ~loc (List.map (convert_sexp_pattern ~loc) pats)]]
   in
   match p.ppat_desc with

@@ -9,17 +9,17 @@ let test_match (_ : sexp) (_ : sexp_pattern) =
   if
     Camlrack.Match.sexp_match
       (Camlrack.Match.SPat
-         [Camlrack.Match.Symbol "lambda";
+         [Camlrack.Match.PSymbol "lambda";
          Camlrack.Match.SPat
-           [Camlrack.Match.SYMBOL; Camlrack.Match.Symbol "..."];
+           [Camlrack.Match.SYMBOL; Camlrack.Match.PSymbol "..."];
          Camlrack.Match.ANY;
-         Camlrack.Match.Symbol "..."]) sexp
+         Camlrack.Match.PSymbol "..."]) sexp
   then sexp
   else
     if
       Camlrack.Match.sexp_match
         (Camlrack.Match.SPat
-           [Camlrack.Match.Symbol "+";
+           [Camlrack.Match.PSymbol "+";
            Camlrack.Match.NUMBER;
            Camlrack.Match.NUMBER]) sexp
     then sexp
