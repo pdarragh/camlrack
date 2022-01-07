@@ -18,7 +18,7 @@ let braces_match (lb : token) (rb : token) : bool =
   List.mem (lb, rb) matching_braces
 
 let string_of_sexp_list (sexps : sexp list) : string =
-  "[" ^ String.concat "; " (List.map string_of_sexp sexps) ^ "]"
+  "[" ^ String.concat "; " (List.map full_string_of_sexp sexps) ^ "]"
 
 let string_of_sexp_list_list (sexpss : sexp list list) : string =
   "[" ^ String.concat "; " (List.map string_of_sexp_list sexpss) ^ "]"
