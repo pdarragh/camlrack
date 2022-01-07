@@ -9,6 +9,7 @@ allows for easily working with S-expressions without extra typing."""
 maintainer: ["Pierce Darragh <pierce.darragh@gmail.com>"]
 authors: ["Pierce Darragh <pierce.darragh@gmail.com>"]
 license: "MIT"
+tags: ["S-Expressions" "parsing" "matching" "ppx" "extension"]
 homepage: "https://github.com/pdarragh/camlrack"
 doc: "https://github.com/pdarragh/camlrack"
 bug-reports: "https://github.com/pdarragh/camlrack/issues"

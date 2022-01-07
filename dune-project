@@ -1,4 +1,5 @@
 (lang dune 2.9)
+(name camlrack)
 
 (generate_opam_files true)
 (source (github pdarragh/camlrack))
@@ -16,7 +17,7 @@
 S-expressions and vice versa. It is intended to be simple and minimal, yet
 fully-featured.")
  (depends (ocaml (>= 4.12)))
- (tags ("S-expressions" "parsing")))
+ (tags ("S-Expressions" "parsing")))
 
 (package
  (name ppx_camlrack)
@@ -28,4 +29,5 @@ allows for easily working with S-expressions without extra typing.")
  (depends
   (ocaml (>= 4.12))
   (ppxlib (>= 0.23.0))
-  (camlrack (>= 0.9.0))))
+  (camlrack (>= 0.9.0)))
+ (tags ("S-Expressions" "parsing" "matching" "ppx" "extension")))

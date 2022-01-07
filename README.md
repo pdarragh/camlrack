@@ -4,6 +4,12 @@ Camlrack brings [S-Expressions](https://en.wikipedia.org/wiki/S-expression) and
 easy pattern matching for S-Expressions to OCaml like never before!
 
 
+## Installation
+
+You can install Camlrack by downloading this repository and doing `dune install`
+from the top directory.
+
+
 ## Quick Overview
 
 S-Expressions can be instantiated directly:
