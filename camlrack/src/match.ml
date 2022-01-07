@@ -1,6 +1,12 @@
 include Sexp
 include SexpPatterns
 
+(* The implementation of this function and the associated `sexp_pattern` type
+   are heavily inspired (almost exactly copied) from the implementation of the
+   `s-exp-match?` function in the PLAIT language by Matthew Flatt:
+
+   https://github.com/mflatt/plait/blob/8d842132a11ab7c7621c428c609dcddc2769d145/main.rkt#L238-L340
+*)
 let sexp_match (p : sexp_pattern) (se : sexp) : bool =
   let rec sexp_match (p : sexp_pattern) (se : sexp) : bool =
     match p, se with
