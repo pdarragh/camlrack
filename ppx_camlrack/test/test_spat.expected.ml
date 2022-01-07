@@ -1,4 +1,4 @@
-open Camlrack.Match
+open Camlrack
 let test_match (_ : sexp) (_ : sexp_pattern) =
   let sexp =
     Camlrack.SExp
