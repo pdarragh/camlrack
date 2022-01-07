@@ -7,10 +7,10 @@ type sexp_pattern =
   | FLOAT
   | STRING
   | ANY
-  | Symbol of string
   | Integer of int
   | Float of float
   | String of string
+  | Symbol of string
   | SPat of sexp_pattern list
 
 let rec string_of_sexp_pattern (pat : sexp_pattern) : string =
@@ -21,10 +21,10 @@ let rec string_of_sexp_pattern (pat : sexp_pattern) : string =
   | FLOAT -> "FLOAT"
   | STRING -> "STRING"
   | ANY -> "ANY"
-  | Symbol s -> s
   | Integer i -> string_of_int i
   | Float f -> string_of_float f
   | String s -> "\"" ^ s ^ "\""
+  | Symbol s -> s
   | SPat pats -> "{" ^ String.concat " " (List.map string_of_sexp_pattern pats) ^ "}"
 
 let rec sexp_pattern_of_sexp (sexp : sexp) : sexp_pattern =

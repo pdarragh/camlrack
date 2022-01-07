@@ -55,7 +55,7 @@ let rec pattern_to_sexp_pat (p : pattern) : pattern option =
      S-Expressions manually. *)
   | _ -> convert_pat p
 
-let rec process_pattern (p : pattern) =
+let process_pattern (p : pattern) =
   match pattern_to_sexp_pat p with
   | Some p' -> p'
   | None -> p
