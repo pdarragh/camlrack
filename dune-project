@@ -21,7 +21,7 @@ fully-featured.")
 
 (package
  (name ppx_camlrack)
- (version 0.9.0)
+ (version 0.9.1)
  (synopsis "PPX for matching S-Expressions")
  (description "'PPX-Camlrack' provides an augmented match expression that
 transforms written S-expressions into their Camlrack-compatible types. This

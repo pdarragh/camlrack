@@ -3,9 +3,12 @@ open Camlrack.Match
 open Ppxlib
 
 let process_scrutinee (e : expression) : expression =
-  match sexp_exp_of_expression e with
-  | Some ne -> ne
-  | None -> e
+  match e.pexp_desc with
+  | Pexp_constant (Pconst_string (_, _, _)) ->
+    (match sexp_exp_of_expression e with
+     | Some ne -> ne
+     | None -> e)
+  | _ -> e
 
 let pattern_to_sexp_pattern_exp (p : pattern) : expression option =
   let open Ast_builder.Default in
