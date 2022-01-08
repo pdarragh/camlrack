@@ -11,7 +11,7 @@
 
 (package
  (name camlrack)
- (version 0.9.0)
+ (version 0.9.1)
  (synopsis "S-Expression parsing for OCaml")
  (description "'Camlrack' provides the ability to parse strings into
 S-expressions and vice versa. It is intended to be simple and minimal, yet

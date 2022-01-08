@@ -4,6 +4,7 @@ include SexpPatterns
 module Tokenize = Tokenize
 module Parse = Parse
 module Match = Match
+module ListConvenienceFunctions = Match.ListConvenienceFunctions
 
 let sexp_of_string (s : string) : sexp option = Parse.parse s
 

@@ -1,6 +1,8 @@
 include Sexp
 include SexpPatterns
 
+module ListConvenienceFunctions = ListConvenience
+
 (* The implementation of this function and the associated `sexp_pattern` type
    are heavily inspired (almost exactly copied) from the implementation of the
    `s-exp-match?` function in the PLAIT language by Matthew Flatt:
