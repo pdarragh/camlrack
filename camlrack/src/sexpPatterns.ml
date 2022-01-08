@@ -2,7 +2,6 @@ open Sexp
 
 type sexp_pattern =
   | SYMBOL
-  | NUMBER
   | INTEGER
   | FLOAT
   | STRING
@@ -16,7 +15,6 @@ type sexp_pattern =
 let rec string_of_sexp_pattern (pat : sexp_pattern) : string =
   match pat with
   | SYMBOL -> "SYMBOL"
-  | NUMBER -> "NUMBER"
   | INTEGER -> "INTEGER"
   | FLOAT -> "FLOAT"
   | STRING -> "STRING"
@@ -30,7 +28,6 @@ let rec string_of_sexp_pattern (pat : sexp_pattern) : string =
 let rec sexp_pattern_of_sexp (sexp : sexp) : sexp_pattern =
   match sexp with
   | Symbol "SYMBOL" -> SYMBOL
-  | Symbol "NUMBER" -> NUMBER
   | Symbol "INTEGER" -> INTEGER
   | Symbol "FLOAT" -> FLOAT
   | Symbol "STRING" -> STRING

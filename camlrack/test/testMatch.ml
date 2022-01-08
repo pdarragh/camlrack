@@ -10,21 +10,23 @@ let test_match (raw_pat, raw_sexp : string * string) _ =
 
 let match_tests =
   [ ("1", "1")
-  ; ("NUMBER", "1")
-  ; ("NUMBER", "-1")
+  ; ("INTEGER", "1")
+  ; ("INTEGER", "-1")
+  ; ("FLOAT", "1.0")
+  ; ("FLOAT", "-42e1")
   ; ("lambda", "lambda")
   ; ("SYMBOL", "lambda")
   ; ("SYMBOL", ">>=")
   ; ("ANY", "1")
   ; ("ANY", "foo")
   ; ("ANY", "(foo bar)")
-  ; ("{NUMBER SYMBOL}", "(1 foo)")
-  ; ("{NUMBER {SYMBOL SYMBOL}}", "(1 (lhs rhs))")
+  ; ("{INTEGER SYMBOL}", "(1 foo)")
+  ; ("{INTEGER {SYMBOL SYMBOL}}", "(1 (lhs rhs))")
   ; ("{lambda {SYMBOL} ANY}", "(lambda (x) (1 2 3))")
   ]
 
 let ellipsis_tests =
-  [ ("{NUMBER ...}",
+  [ ("{INTEGER ...}",
      [ "(1)"
      ; "(1 2)"
      ; "(1 2 3)"
@@ -38,7 +40,7 @@ let ellipsis_tests =
      ; "(foo 1)"
      ; "(foo (1 2 3) bar)"
      ])
-  ; ("{lambda NUMBER ... SYMBOL}",
+  ; ("{lambda INTEGER ... SYMBOL}",
      [ "(lambda 1 foo)"
      ; "(lambda 1 2 foo)"
      ; "(lambda 1 2 3 foo)"

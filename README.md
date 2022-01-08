@@ -92,7 +92,7 @@ The second extension allows for easy pattern-matching against S-Expressions.
 
 ```ocaml
 let matching_function sexp = match%spat sexp with
-  | "NUMBER" -> "it's a number"
+  | "INTEGER" -> "it's an integer"
   | "(lhs rhs)" -> "found two symbols: lhs and rhs"
   | "(let ([SYMBOL ANY] ...) ANY ...)" -> "whoa, pretty fancy!"
 ```

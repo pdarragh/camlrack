@@ -20,7 +20,7 @@ let test_match (_ : sexp) (_ : sexp_pattern) =
       Camlrack.Match.sexp_match
         (Camlrack.Match.SPat
            [Camlrack.Match.PSymbol "+";
-           Camlrack.Match.NUMBER;
-           Camlrack.Match.NUMBER]) sexp
+           Camlrack.Match.INTEGER;
+           Camlrack.Match.INTEGER]) sexp
     then sexp
     else sexp

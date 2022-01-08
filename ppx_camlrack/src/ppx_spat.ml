@@ -15,7 +15,6 @@ let pattern_to_sexp_pattern_exp (p : pattern) : expression option =
   let rec convert_sexp_pattern ~loc (pat : sexp_pattern) : expression =
     match pat with
     | SYMBOL -> [%expr Camlrack.Match.SYMBOL]
-    | NUMBER -> [%expr Camlrack.Match.NUMBER]
     | INTEGER -> [%expr Camlrack.Match.INTEGER]
     | FLOAT -> [%expr Camlrack.Match.FLOAT]
     | STRING -> [%expr Camlrack.Match.STRING]

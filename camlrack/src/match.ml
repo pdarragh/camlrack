@@ -13,8 +13,6 @@ let sexp_match (p : sexp_pattern) (se : sexp) : bool =
   let rec sexp_match (p : sexp_pattern) (se : sexp) : bool =
     match p, se with
     | SYMBOL, Symbol _ -> true
-    | NUMBER, Integer _ -> true
-    | NUMBER, Float _ -> true
     | INTEGER, Integer _ -> true
     | FLOAT, Float _ -> true
     | STRING, String _ -> true
