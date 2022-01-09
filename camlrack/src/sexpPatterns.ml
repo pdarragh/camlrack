@@ -25,20 +25,35 @@ let rec string_of_sexp_pattern (pat : sexp_pattern) : string =
   | PSymbol s -> s
   | SPat pats -> "{" ^ String.concat " " (List.map string_of_sexp_pattern pats) ^ "}"
 
-let rec sexp_pattern_of_sexp (sexp : sexp) : sexp_pattern =
-  match sexp with
-  | Symbol "SYMBOL" -> SYMBOL
-  | Symbol "INTEGER" -> INTEGER
-  | Symbol "FLOAT" -> FLOAT
-  | Symbol "STRING" -> STRING
-  | Symbol "ANY" -> ANY
-  | Symbol s -> PSymbol s
-  | Integer i -> PInteger i
-  | Float f -> PFloat f
-  | String s -> PString s
-  | SExp sexps -> SPat (List.map sexp_pattern_of_sexp sexps)
-
-let list_of_sexp_pattern (pat : sexp_pattern) : sexp_pattern list =
-  match pat with
-  | SPat pats -> pats
-  | _ -> failwith "pattern not a list"
+let sexp_pattern_of_sexp (sexp : sexp) : sexp_pattern option =
+  let rec valid_pattern (sexp : sexp) : bool =
+    match sexp with
+    | SExp ses -> valid_patterns ses false
+    | Integer _ | Float _ | String _ -> true
+    | Symbol "..." -> false
+    | Symbol _ -> true
+  and valid_patterns (sexps : sexp list) (saw_dots : bool) : bool =
+    match sexps with
+    | [] -> true
+    | _ :: Symbol "..." :: ses ->
+      if saw_dots
+      then false
+      else valid_patterns ses true
+    | se :: ses -> valid_pattern se && valid_patterns ses saw_dots
+  in
+  let rec build_pattern (sexp : sexp) : sexp_pattern =
+    match sexp with
+    | Symbol "SYMBOL" -> SYMBOL
+    | Symbol "INTEGER" -> INTEGER
+    | Symbol "FLOAT" -> FLOAT
+    | Symbol "STRING" -> STRING
+    | Symbol "ANY" -> ANY
+    | Symbol s -> PSymbol s
+    | Integer i -> PInteger i
+    | Float f -> PFloat f
+    | String s -> PString s
+    | SExp sexps -> SPat (List.map build_pattern sexps)
+  in
+  if valid_pattern sexp
+  then Some (build_pattern sexp)
+  else None

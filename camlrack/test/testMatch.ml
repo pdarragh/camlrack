@@ -4,9 +4,11 @@ open Camlrack.Parse
 open Camlrack.Match
 
 let test_match (raw_pat, raw_sexp : string * string) _ =
-  let pat = sexp_pattern_of_sexp (parse_exn raw_pat) in
-  let sexp = parse_exn raw_sexp in
-  assert_equal true (sexp_match pat sexp)
+  match sexp_pattern_of_sexp (parse_exn raw_pat) with
+  | Some pat ->
+    let sexp = parse_exn raw_sexp in
+    assert_equal true (sexp_match pat sexp)
+  | None -> failwith "invalid test"
 
 let match_tests =
   [ ("1", "1")

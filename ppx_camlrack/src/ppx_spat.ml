@@ -28,7 +28,10 @@ let pattern_to_sexp_pattern_exp (p : pattern) : expression option =
   match p.ppat_desc with
   | Ppat_constant (Pconst_string (s, loc, _)) ->
     (match Camlrack.sexp_of_string s with
-     | Some se -> Some (convert_sexp_pattern ~loc (sexp_pattern_of_sexp se))
+     | Some se ->
+       (match sexp_pattern_of_sexp se with
+        | Some pat -> Some (convert_sexp_pattern ~loc pat)
+        | None -> None)
      | None -> None)
   | _ -> None
 

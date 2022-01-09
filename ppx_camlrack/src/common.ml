@@ -1,6 +1,22 @@
 open Camlrack
 open Ppxlib
 
+(* The `errors`, `error`, and `warn` functions are based on implementations
+   found in ppx_regexp:
+
+   https://github.com/paurkedal/ppx_regexp/blob/master/ppx_regexp/ppx_regexp.ml#L28-L33
+*)
+
+let errors ~loc msg ~sub = raise (Location.Error (Location.Error.make ~loc msg ~sub))
+
+let error ~loc msg = errors ~loc msg ~sub:[]
+
+let warn ~loc msg e =
+  let open Ast_helper in
+  let e_msg = Exp.constant (Const.string msg) in
+  let structure = {pstr_desc = Pstr_eval (e_msg, []); pstr_loc = loc} in
+  Exp.attr e (Attr.mk ~loc {txt = "ocaml.ppwarning"; loc} (PStr [structure]))
+
 let rec sexp_pat_of_pattern (p : pattern) : pattern option =
   let open Ast_builder.Default in
   let rec convert_pat (p : pattern) : pattern option =
