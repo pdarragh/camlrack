@@ -1,3 +1,4 @@
 (tests
  (names testTokenize testParse testMatch)
+ (package camlrack)
  (libraries camlrack oUnit))
