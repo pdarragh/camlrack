@@ -25,6 +25,19 @@ let rec string_of_sexp_pattern (pat : sexp_pattern) : string =
   | PSymbol s -> s
   | SPat pats -> "{" ^ String.concat " " (List.map string_of_sexp_pattern pats) ^ "}"
 
+let rec repr_string_of_sexp_pattern (pat : sexp_pattern) : string =
+  match pat with
+  | SYMBOL -> "SYMBOL"
+  | INTEGER -> "INTEGER"
+  | FLOAT -> "FLOAT"
+  | STRING -> "STRING"
+  | ANY -> "ANY"
+  | PInteger i -> "PInteger " ^ string_of_int i
+  | PFloat f -> "PFloat " ^ string_of_float f
+  | PString s -> {|PString "|} ^ s ^ {|"|}
+  | PSymbol s -> {|PSymbol "|} ^ s ^ {|"|}
+  | SPat pats -> "SPat [" ^ String.concat "; " (List.map repr_string_of_sexp_pattern pats) ^ "]"
+
 let sexp_pattern_of_sexp (sexp : sexp) : sexp_pattern option =
   let rec valid_pattern (sexp : sexp) : bool =
     match sexp with

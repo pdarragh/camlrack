@@ -13,6 +13,14 @@ let rec render_string_of_sexp (se : sexp) : string =
   | Symbol s -> s
   | SExp sexps -> "(" ^ String.concat " " (List.map render_string_of_sexp sexps) ^ ")"
 
+let rec repr_string_of_sexp (se : sexp) : string =
+  match se with
+  | Integer i -> "Integer " ^ string_of_int i
+  | Float f -> "Float " ^ string_of_float f
+  | String s -> {|String "|} ^ s ^ {|"|}
+  | Symbol s -> {|Symbol "|} ^ s ^ {|"|}
+  | SExp sexps -> "SExp [" ^ String.concat "; " (List.map repr_string_of_sexp sexps) ^ "]"
+
 module Errors = struct
   let sexp_not_a (s : string) (se : sexp) : 'a =
     failwith ("S-Expression is not a " ^ s ^ ": " ^ render_string_of_sexp se)
