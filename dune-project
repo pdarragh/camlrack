@@ -2,7 +2,7 @@
 (name camlrack)
 
 ; The same version number is used for both packages.
-(version 0.9.2)
+(version 0.9.3)
 
 (generate_opam_files true)
 (source (github pdarragh/camlrack))
