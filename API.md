@@ -18,7 +18,7 @@ by Camlrack.
       * <a id="String" /> `String` of `string`:
         String literals.
       * <a id="Symbol" /> `Symbol` of `string`:
-        Symbols. (Not quite the same as [Strings](#String).)
+        Symbols. (Not quite the same as [`String`](#String)s.)
       * <a id="sexp-SExp" /> `SExp` of [`sexp`](#sexp) `list`:
         Sub-lists of [`sexp`](#sexp)s.
 
@@ -31,15 +31,15 @@ The `sexp_pattern` type is used for specifying such shapes:
 
   * <a id="sexp_pattern" /> `sexp_pattern`:
     S-Expression matching patterns are composed of...
-      * <a id="SYMBOL" /> `SYMBOL`:
+      * <a id="P_SYMBOL" /> `SYMBOL`:
         [`Symbol`](#Symbol) wildcards.
-      * <a id="INTEGER" /> `INTEGER`:
+      * <a id="P_INTEGER" /> `INTEGER`:
         [`Integer`](#Integer) wildcards.
-      * <a id="FLOAT" /> `FLOAT`:
+      * <a id="P_FLOAT" /> `FLOAT`:
         [`Float`](#Float) wildcards.
-      * <a id="STRING" /> `STRING`:
+      * <a id="P_STRING" /> `STRING`:
         [`String`](#String) wildcards.
-      * <a id="ANY" /> `ANY`:
+      * <a id="P_ANY" /> `ANY`:
         Generic [`sexp`](#sexp) wildcards.
       * <a id="PInteger" /> `PInteger` of `int`:
         Literal matches for [`Integer`](#Integer)s.
@@ -60,12 +60,28 @@ The `sexp_pattern` type is used for specifying such shapes:
   * <a id="sexp_of_string" /> `sexp_of_string` : `string` &rarr; [`sexp`](#sexp)
     `option`
 
-    Attempts to convert a string to an [`sexp`](#sexp)
+    Attempts to convert a string to an [`sexp`](#sexp).
+
+    ```ocaml
+    # sexp_of_string "(one (2 3.0) \"two times two\")";;
+    - : sexp option =
+    Some (SExp [Symbol "one"; SExp [Integer 2; Float 3.]; String "two times two"])
+    # sexp_of_string "((one)";;
+    - : sexp option = None
+    ```
 
   * <a id="sexp_of_string_exn" /> `sexp_of_string_exn` : `string` &rarr;
     [`sexp`](#sexp)
 
     Converts a string to an [`sexp`](#sexp), or else raises an exception.
+
+    ```ocaml
+    # sexp_of_string_exn "(one (2 3.0) \"two times two\")";;
+    - : sexp =
+    SExp [Symbol "one"; SExp [Integer 2; Float 3.]; String "two times two"]
+    # sexp_of_string_exn "((one)";;
+    Exception: Failure "unterminated S-expression".
+    ```
 
 
 ### Converting Whole S-Expressions to Strings
@@ -73,8 +89,7 @@ The `sexp_pattern` type is used for specifying such shapes:
   * <a id="render_string_of_sexp" /> `render_string_of_sexp` : [`sexp`](#sexp)
     &rarr; `string`
 
-    Converts an [`sexp`](#sexp) to a string representing that S-Expression. For
-    example:
+    Converts an [`sexp`](#sexp) to a string representing that S-Expression.
 
     ```ocaml
     # render_string_of_sexp (SExp [Symbol "foo"; Integer 42]);;
@@ -85,7 +100,7 @@ The `sexp_pattern` type is used for specifying such shapes:
     &rarr; `string`
 
     Converts an [`sexp`](#sexp) to a string that is explicitly annotated, useful
-    for debugging but not much else. For example:
+    for debugging but not much else.
 
     ```ocaml
     # repr_string_of_sexp (SExp [Symbol "foo"; Integer 42]);;
@@ -254,8 +269,8 @@ The `sexp_pattern` type is used for specifying such shapes:
     ```ocaml
     # sexp_to_symbol (Symbol "hello");;
     - : string = "hello"
-    # sexp_to_string (Integer 1);;
-    Exception: Failure "S-Expression is not a string: 1".
+    # sexp_to_symbol (Integer 1);;
+    Exception: Failure "S-Expression is not a symbol: 1".
     ```
 
   * <a id="symbol_to_sexp" /> `symbol_to_sexp` : `string` &rarr; [`sexp`](#sexp)
@@ -265,4 +280,35 @@ The `sexp_pattern` type is used for specifying such shapes:
     ```ocaml
     # symbol_to_sexp "foo";;
     - : sexp = Symbol "foo"
+    ```
+
+
+## Parsing Strings to S-Expression Patterns
+
+  * <a id="sexp_pattern_of_string" /> `sexp_pattern_of_string` : `string` &rarr;
+    [`sexp_pattern`](#sexp_pattern) `option`
+
+    Attempts to convert a string to an [`sexp_pattern`](#sexp_pattern).
+
+    ```ocaml
+    # sexp_pattern_of_string "(lambda (SYMBOL ...) ANY ...)";;
+    - : sexp_pattern option =
+    Some
+     (SPat [PSymbol "lambda"; SPat [SYMBOL; PSymbol "..."]; ANY; PSymbol "..."])
+    # sexp_pattern_of_string "(lambda (FOO)";;
+    - : sexp_pattern option = None
+    ```
+
+  * <a id="sexp_pattern_of_string_exn" /> `sexp_pattern_of_string_exn` :
+    `string` &rarr; [`sexp_pattern`](#sexp_pattern)
+
+    Attempts to convert a string to an [`sexp_pattern`](#sexp_pattern), or else
+    raises an exception.
+
+    ```ocaml
+    # sexp_pattern_of_string_exn "(lambda (SYMBOL ...) ANY ...)";;
+    - : sexp_pattern =
+    SPat [PSymbol "lambda"; SPat [SYMBOL; PSymbol "..."]; ANY; PSymbol "..."]
+    # sexp_pattern_of_string "(lambda (FOO)";;
+    Exception: Failure "unterminated S-expression".
     ```
