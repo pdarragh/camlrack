@@ -3,6 +3,10 @@
 This document provides information about all of the types and functions exported
 by Camlrack.
 
+**Note on the examples.** Each function has some examples given. The lines
+beginning with `#` are meant to be read as inputs to `utop`, and the other lines
+are the output received from `utop` after executing the preceding input line.
+
 
 ## Table of Contents
 
