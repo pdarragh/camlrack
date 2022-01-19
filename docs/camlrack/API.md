@@ -13,7 +13,8 @@ by Camlrack.
           * [`sexp_pattern`](#sexp_pattern)
   * [Functions](#functions)
       * [Parsing Strings to S-Expressions](#parsing-strings-to-s-expressions)
-          * [`sexp_of_string`](#sexp_of_string)
+          * [`sexp_of_string` : `string` &rarr; `sexp`
+            `option`](#sexp_of_string)
           * [`sexp_of_string_exn`](#sexp_of_string_exn)
       * [Converting Whole S-Expressions to
         Strings](#converting-whole-s-expressions-to-strings)
