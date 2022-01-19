@@ -6,7 +6,8 @@ by Camlrack.
 
 ## Types
 
-### `sexp`: S-Expressions <a id="sexp">
+<a id="sexp">
+### `sexp`: S-Expressions
 
 S-Expressions are either built of fundamental symbols or lists of S-Expressions:
 
@@ -19,12 +20,29 @@ type sexp =
   | SExp of sexp list
 ```
 
-  * `sexp` : S-Expressions are composed of...
-      * `Integer` of `int` : integers.
-      * `Float` of `float` : floating-point numbers.
-      * `String` of `string` : strings.
-      * `Symbol` of `string` : symbols.
-      * `SExp` of `sexp` `list` : sub-lists of S-Expressions.
+  * `sexp`
+
+    S-Expressions are composed of...
+
+      * <a id="Integer"> `Integer` of `int`
+
+        Integer literals.
+
+      * <a id="Float"> `Float` of `float`
+
+        Floating-point literals.
+
+      * <a id="String"> `String` of `string`
+
+        String literals.
+
+      * <a id="Symbol"> `Symbol` of `string`
+
+        Symbols. (Not quite the same as [Strings](#String).)
+
+      * <a id="SExp"> `SExp` of `sexp` `list`
+
+        Sub-lists of S-Expressions.
 
 ### `sexp_pattern`: Patterns for Matching S-Expressions
 
@@ -47,37 +65,38 @@ type sexp_pattern =
 ```
 
   * `sexp_pattern` : S-Expression matching patterns are composed of...
-      * `SYMBOL` : a `Symbol` wildcard.
-      * `INTEGER` : an `Integer` wildcard.
-      * `FLOAT` : a `Float` wildcard.
-      * `STRING` : a `String` wildcard.
-      * `ANY` : an `sexp` wildcard.
-      * `PInteger` of `int` : an exact match for an `Integer`.
-      * `PFloat` of `float` : an exact match for a `Float`.
-      * `PString` of `string` : an exact match for a `String`.
-      * `PSymbol` of `string` : an exact match for a `Symbol`.
-      * `SPat` of `sexp_pattern` `list` : an exact match for a sub-list of
-        S-Expressions.
+      * <a id="SYMBOL"> `SYMBOL` : a `Symbol` wildcard.
+      * <a id="INTEGER"> `INTEGER` : an `Integer` wildcard.
+      * <a id="FLOAT"> `FLOAT` : a `Float` wildcard.
+      * <a id="STRING"> `STRING` : a `String` wildcard.
+      * <a id="ANY"> `ANY` : an `sexp` wildcard.
+      * <a id="PInteger"> `PInteger` of `int` : an exact match for an `Integer`.
+      * <a id="PFloat"> `PFloat` of `float` : an exact match for a `Float`.
+      * <a id="PString"> `PString` of `string` : an exact match for a `String`.
+      * <a id="PSymbol"> `PSymbol` of `string` : an exact match for a `Symbol`.
+      * <a id="SPat"> `SPat` of `sexp_pattern` `list` : an exact match for a
+        sub-list of S-Expressions.
 
 
 ## Functions
 
 ### Parsing Strings to S-Expressions
 
-  * `sexp_of_string` : `string` &rarr; [`sexp`](#sexp) `option` <a
-    id="sexp_of_string">
+  * <a id="sexp_of_string"> `sexp_of_string` : `string` &rarr; [`sexp`](#sexp)
+        `option`
 
     Attempts to convert a string to an [`sexp`](#sexp)
 
-  * `sexp_of_string_exn` : `string` &rarr; [`sexp`](#sexp) <a
-    id="sexp_of_string_exn">
+  * <a id="sexp_of_string_exn"> `sexp_of_string_exn` : `string` &rarr;
+    [`sexp`](#sexp)
 
     Converts a string to an [`sexp`](#sexp), or else raises an exception.
 
 
 ### Converting Whole S-Expressions to Strings
 
-  * `render_string_of_sexp` : [`sexp`](#sexp) &rarr; `string`
+  * <a id="render_string_of_sexp"> `render_string_of_sexp` : [`sexp`](#sexp)
+    &rarr; `string`
 
     Converts an [`sexp`](#sexp) to a string representing that S-Expression. For
     example:
@@ -87,7 +106,8 @@ type sexp_pattern =
     - : string = "(foo 42)"
     ```
 
-  * `repr_string_of_sexp` : [`sexp`](#sexp) &rarr; `string`
+  * <a id ="repr_string_of_sexp"> `repr_string_of_sexp` : [`sexp`](#sexp) &rarr;
+    `string`
 
     Converts an [`sexp`](#sexp) to a string that is explicitly annotated, useful
     for debugging but not much else. For example:
@@ -100,11 +120,11 @@ type sexp_pattern =
 
 ### Other S-Expression Conversion Functions
 
-  * `sexp_to_list_opt` : [`sexp`](#sexp) &rarr; ([`sexp`](#sexp) `list`)
-    `option`
+  * <a id ="sexp_to_list_opt"> `sexp_to_list_opt` : [`sexp`](#sexp) &rarr;
+    ([`sexp`](#sexp) `list`) `option`
 
-    Given an `SExp` variant of [`sexp`](#sexp), returns `Some` internal list of
-    S-Expressions. Otherwise, returns `None`.
+    Given an [`SExp`](#SExp) variant of [`sexp`](#sexp), returns a `Some`
+    containing the internal list of S-Expressions. Otherwise, returns `None`.
 
     ```ocaml
     # sexp_to_list_opt (SExp [Integer 1; Integer 2]);;
@@ -113,7 +133,161 @@ type sexp_pattern =
     - : sexp list option = None
     ```
 
-  * `sexp_to_list` : [`sexp`](#sexp) &rarr; [`sexp`](#sexp) `list`
+  * <a id ="sexp_to_list"> `sexp_to_list` : [`sexp`](#sexp) &rarr;
+    [`sexp`](#sexp) `list`
 
-    Given an `SExp` variant of [`sexp`](#sexp), returns the internal list of
-    S-Expressions. Otherwise, raises an exception.
+    Given an [`SExp`](#SExp) variant of [`sexp`](#sexp), returns the internal
+    list of S-Expressions. Otherwise, raises an exception.
+
+    ```ocaml
+    # sexp_to_list (SExp [Integer 1; Integer 2]);;
+    - : sexp list option = [Integer 1; Integer 2]
+    # sexp_to_list (Integer 3);;
+    Exception: Failure "S-Expression is not a list: 3".
+    ```
+
+  * <a id="list_to_sexp"> `list_to_sexp` : [`sexp`](#sexp) `list` &rarr;
+    [`sexp`](#sexp)
+
+    Given a list of [`sexp`](#sexp)s, produces a single [`SExp`](#SExp).
+
+    ```ocaml
+    # list_to_sexp [Integer 1; Integer 2];;
+    - : sexp = SExp [Integer 1; Integer 2]
+    ```
+
+  * <a id="sexp_to_int_opt"> `sexp_to_int_opt` : [`sexp`](#sexp) &rarr; `int`
+    `option`
+
+    Given an [`Integer`](#Integer), returns a `Some` containing the internal
+    `int`. Otherwise, returns `None`.
+
+    ```ocaml
+    # sexp_to_int_opt (Integer 1);;
+    - : int option = Some 1
+    # sexp_to_int_opt (String "not an integer");;
+    - : int option = None
+    ```
+
+  * <a id="sexp_to_int"> `sexp_to_int` : [`sexp`](#sexp) &rarr; `int`
+
+    Given an [`Integer`](#Integer), returns the internal `int`. Otherwise,
+    raises an exception.
+
+    ```ocaml
+    # sexp_to_int (Integer 1);;
+    - : int = 1
+    # sexp_to_int (String "not an integer");;
+    Exception: Failure "S-Expression is not an integer: \"not an integer\"".
+    ```
+
+  * <a id="int_to_sexp"> `int_to_sexp` : `int` &rarr; [`sexp`](#sexp)
+
+    Given an `int`, produces an [`Integer`](#Integer).
+
+    ```ocaml
+    # int_to_sexp 42;;
+    - : sexp = Integer 42
+    ```
+
+  * <a id="sexp_to_float_opt"> `sexp_to_float_opt` : [`sexp`](#sexp) &rarr;
+    `float` `option`
+
+    Given a [`Float`](#Float), returns a `Some` containing the internal `float`.
+    Otherwise, returns `None`.
+
+    ```ocaml
+    # sexp_to_float_opt (Float 1.0);;
+    - : float option = Some 1.0
+    # sexp_to_float_opt (String "not a float");;
+    - : float option = None
+    ```
+
+  * <a id="sexp_to_float"> `sexp_to_float` : [`sexp`](#sexp) &rarr; `float`
+
+    Given a [`Float`](#Float), returns the internal `float`. Otherwise, raises
+    an exception.
+
+    ```ocaml
+    # sexp_to_float (Float 1.0);;
+    - : float = 1.0
+    # sexp_to_float (String "not a float");;
+    Exception: Failure "S-Expression is not a float: \"not a float\"".
+    ```
+
+  * <a id="float_to_sexp"> `float_to_sexp` : `float` &rarr; [`sexp`](#sexp)
+
+    Given a `float`, produces a [`Float`](#Float).
+
+    ```ocaml
+    # float_to_sexp 4.2;;
+    - : sexp = Float 4.2
+    ```
+
+  * <a id="sexp_to_string_opt"> `sexp_to_string_opt` : [`sexp`](#sexp) &rarr;
+    `string` `option`
+
+    Given a [`String`](#String), returns a `Some` containing the internal
+    `string`. Otherwise, returns `None`.
+
+    ```ocaml
+    # sexp_to_string_opt (String "hello");;
+    - : string option = Some "hello"
+    # sexp_to_string_opt (Integer 1);;
+    - : string option = None
+    ```
+
+  * <a id="sexp_to_string"> `sexp_to_string` : [`sexp`](#sexp) &rarr; `string`
+
+    Given a [`String`](#String), returns the internal `string`. Otherwise,
+    raises an exception.
+
+    ```ocaml
+    # sexp_to_string (String "hello");;
+    - : string = "hello"
+    # sexp_to_string (Integer 1);;
+    Exception: Failure "S-Expression is not a string: 1".
+    ```
+
+  * <a id="string_to_sexp"> `string_to_sexp` : `string` &rarr; [`sexp`](#sexp)
+
+    Given a `string`, produces a [`String`](#String).
+
+    ```ocaml
+    # string_to_sexp "some string";;
+    - : sexp = String "some string"
+    ```
+
+  * <a id="sexp_to_symbol_opt"> `sexp_to_symbol_opt` : [`sexp`](#sexp) &rarr;
+    `string` `option`
+
+    Given a [`Symbol`](#Symbol), returns a `Some` containing the internal
+    `string`. Otherwise, returns `None`.
+
+    ```ocaml
+    # sexp_to_symbol_opt (Symbol "hello");;
+    - : string option = Some "hello"
+    # sexp_to_symbol_opt (Integer 1);;
+    - : string option = None
+    ```
+
+  * <a id="sexp_to_symbol"> `sexp_to_symbol` : [`sexp`](#sexp) &rarr; `string`
+
+    Given a [`Symbol`](#Symbol), returns the internal `string`. Otherwise,
+    raises an exception.
+
+    ```ocaml
+    # sexp_to_symbol (Symbol "hello");;
+    - : string = "hello"
+    # sexp_to_string (Integer 1);;
+    Exception: Failure "S-Expression is not a string: 1".
+    ```
+
+  * <a id="symbol_to_sexp"> `symbol_to_sexp` : `string` &rarr; [`sexp`](#sexp)
+
+    Given a `string`, produces a [`Symbol`](#Symbol).
+
+    ```ocaml
+    # symbol_to_sexp "foo";;
+    - : sexp = Symbol "foo"
+    ```
