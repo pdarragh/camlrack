@@ -12,7 +12,7 @@ type sexp_pattern =
   | PSymbol of string
   | SPat of sexp_pattern list
 
-let rec string_of_sexp_pattern (pat : sexp_pattern) : string =
+let rec render_string_of_sexp_pattern (pat : sexp_pattern) : string =
   match pat with
   | SYMBOL -> "SYMBOL"
   | INTEGER -> "INTEGER"
@@ -23,7 +23,7 @@ let rec string_of_sexp_pattern (pat : sexp_pattern) : string =
   | PFloat f -> string_of_float f
   | PString s -> "\"" ^ s ^ "\""
   | PSymbol s -> s
-  | SPat pats -> "{" ^ String.concat " " (List.map string_of_sexp_pattern pats) ^ "}"
+  | SPat pats -> "{" ^ String.concat " " (List.map render_string_of_sexp_pattern pats) ^ "}"
 
 let rec repr_string_of_sexp_pattern (pat : sexp_pattern) : string =
   match pat with
