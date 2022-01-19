@@ -6,8 +6,7 @@ by Camlrack.
 
 ## Types
 
-<a id="sexp">
-### `sexp`: S-Expressions
+<a id="sexp"><h3>`sexp`: S-Expressions</h3></a>
 
 S-Expressions are either built of fundamental symbols or lists of S-Expressions:
 
@@ -24,23 +23,23 @@ type sexp =
 
     S-Expressions are composed of...
 
-      * <a id="Integer"> `Integer` of `int`
+      * <a id="Integer" /> `Integer` of `int`
 
         Integer literals.
 
-      * <a id="Float"> `Float` of `float`
+      * <a id="Float" /> `Float` of `float`
 
         Floating-point literals.
 
-      * <a id="String"> `String` of `string`
+      * <a id="String" /> `String` of `string`
 
         String literals.
 
-      * <a id="Symbol"> `Symbol` of `string`
+      * <a id="Symbol" /> `Symbol` of `string`
 
         Symbols. (Not quite the same as [Strings](#String).)
 
-      * <a id="SExp"> `SExp` of `sexp` `list`
+      * <a id="SExp" /> `SExp` of `sexp` `list`
 
         Sub-lists of S-Expressions.
 
