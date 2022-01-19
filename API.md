@@ -9,14 +9,18 @@ by Camlrack.
 
 ### S-Expressions
 
-  * <a id="sexp" /> `sexp`: S-Expressions are composed of...
-      * <a id="Integer" /> `Integer` of `int`: Integer literals.
-      * <a id="Float" /> `Float` of `float`: Floating-point literals.
-      * <a id="String" /> `String` of `string`: String literals.
-      * <a id="Symbol" /> `Symbol` of `string`: Symbols. (Not quite the same as
-        [Strings](#String).)
-      * <a id="sexp-SExp" /> `SExp` of [`sexp`](#sexp) `list`: Sub-lists of
-        S-Expressions.
+  * <a id="sexp" /> `sexp`:
+    S-Expressions are composed of...
+      * <a id="Integer" /> `Integer` of `int`:
+        Integer literals.
+      * <a id="Float" /> `Float` of `float`:
+        Floating-point literals.
+      * <a id="String" /> `String` of `string`:
+        String literals.
+      * <a id="Symbol" /> `Symbol` of `string`:
+        Symbols. (Not quite the same as [Strings](#String).)
+      * <a id="sexp-SExp" /> `SExp` of [`sexp`](#sexp) `list`:
+        Sub-lists of [`sexp`](#sexp)s.
 
 
 ### Patterns for Matching S-Expressions
@@ -25,23 +29,28 @@ Sometimes one does not wish to match S-Expressions literally, but would instead
 prefer a regex-like experience for matching against *shapes* of S-Expressions.
 The `sexp_pattern` type is used for specifying such shapes:
 
-  * <a id="sexp_pattern" /> `sexp_pattern` : S-Expression matching patterns are
-    composed of...
-      * <a id="SYMBOL" /> `SYMBOL` : a [`Symbol`](#Symbol) wildcard.
-      * <a id="INTEGER" /> `INTEGER` : an [`Integer`](#Integer) wildcard.
-      * <a id="FLOAT" /> `FLOAT` : a [`Float`](#Float) wildcard.
-      * <a id="STRING" /> `STRING` : a [`String`](#String) wildcard.
-      * <a id="ANY" /> `ANY` : an [`sexp`](#sexp) wildcard.
-      * <a id="PInteger" /> `PInteger` of `int` : an exact match for an
-        [`Integer`](#Integer).
-      * <a id="PFloat" /> `PFloat` of `float` : an exact match for a
-        [`Float`](#Float).
-      * <a id="PString" /> `PString` of `string` : an exact match for a
-        [`String`](#String).
-      * <a id="PSymbol" /> `PSymbol` of `string` : an exact match for a
-        [`Symbol`](#Symbol).
-      * <a id="SPat" /> `SPat` of [`sexp_pattern`](#sexp_pattern) `list` : an
-        exact match for a sub-list of [`sexp`s](#sexp).
+  * <a id="sexp_pattern" /> `sexp_pattern`:
+    S-Expression matching patterns are composed of...
+      * <a id="SYMBOL" /> `SYMBOL`:
+        [`Symbol`](#Symbol) wildcards.
+      * <a id="INTEGER" /> `INTEGER`:
+        [`Integer`](#Integer) wildcards.
+      * <a id="FLOAT" /> `FLOAT`:
+        [`Float`](#Float) wildcards.
+      * <a id="STRING" /> `STRING`:
+        [`String`](#String) wildcards.
+      * <a id="ANY" /> `ANY`:
+        Generic [`sexp`](#sexp) wildcards.
+      * <a id="PInteger" /> `PInteger` of `int`:
+        Literal matches for [`Integer`](#Integer)s.
+      * <a id="PFloat" /> `PFloat` of `float`:
+        Literal matches for [`Float`](#Float)s.
+      * <a id="PString" /> `PString` of `string`:
+        Literal matches for [`String`](#String)s.
+      * <a id="PSymbol" /> `PSymbol` of `string`:
+        Literal matches for [`Symbol`](#Symbol)s.
+      * <a id="SPat" /> `SPat` of [`sexp_pattern`](#sexp_pattern) `list`:
+        Literal matches for sub-lists of [`sexp`](#sexp)s.
 
 
 ## Functions
