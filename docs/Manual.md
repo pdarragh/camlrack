@@ -85,3 +85,15 @@ $ git pull
 $ dune build @install
 $ dune install
 ```
+
+
+## Camlrack API
+
+The full API for Camlrack is provided [in another file](Camlrack_API.md).
+
+
+## Using Camlrack
+
+First, we assume familiarity with
+[S-Expressions](https://en.wikipedia.org/wiki/S-expression). S-Expressions are a
+concise way to represent list-like data structures using only
