@@ -16,6 +16,8 @@ platform-agnostic to work for Linux or WSL.
   * [Installation](#installation)
       * [From OPAM](#from-opam)
       * [From Source](#from-source)
+  * [Camlrack API](#camlrack-api)
+  * [Using Camlrack](#using-camlrack)
 
 
 ## Installation
@@ -54,7 +56,8 @@ $ dune build @install
 $ dune install
 ```
 
-Once complete, you can add Camlrack as a dependency for any project built with
+Once complete, both `camlrack` and `ppx_camlrack` will be available through
+Dune, and you can now add Camlrack as a dependency for any project built with
 Dune by using the `libraries` directive:
 
 ```dune
@@ -94,6 +97,68 @@ The full API for Camlrack is provided [in another file](Camlrack_API.md).
 
 ## Using Camlrack
 
-First, we assume familiarity with
+We assume familiarity with
 [S-Expressions](https://en.wikipedia.org/wiki/S-expression). S-Expressions are a
-concise way to represent list-like data structures using only
+concise way to represent recursive list-like data structures using only
+primitive data types (integers, floats, strings, or symbols) and brackets
+(parentheses, square brackets, or curly braces).
+
+A string representing an S-Expression can be parsed to an
+[`sexp`](Camlrack_API.md#sexp) by using
+[`sexp_of_string`](Camlrack_API.md#sexp_of_string):
+
+```ocaml
+open Camlrack
+
+(* Get a string from somewhere. *)
+let sexp_string = "(some [string \"containing\" 5] atoms)"
+
+(* Then, convert the string to an S-Expression: *)
+let sexp = sexp_of_string sexp_string
+
+(* We could have built the same S-Expression manually like so: *)
+let manual_sexp =
+  Some (SExp [ Symbol "some"
+             ; SExp [ Symbol "string"
+                    ; String "containing"
+                    ; Integer 5 ]
+             ; Symbol "atoms" ])
+```
+
+
+## Matching S-Expressions with Patterns
+
+The true utility of Camlrack lies in the ability to compare concrete
+S-Expressions ([`sexp`](Camlrack_API.md#sexp)s) to abstract S-Expression
+patterns ([`sexp_pattern`](Camlrack_API.md#sexp_pattern)s). For example, if you
+wanted to check whether an S-Expression given by the user corresponds to the
+Scheme-like syntax of a function definition:
+
+```ocaml
+open Camlrack
+
+let is_function (se : sexp) : bool =
+    match_sexp
+      (SPat [ PSymbol "lambda"
+            ; SPat [ SYMBOL
+                   ; PSymbol "..." ]
+            ; ANY
+            ; PSymbol "..." ])
+      se
+```
+
+Alternatively, we could use a convenience function to write that pattern in a
+string and convert it to an S-Expression pattern dynamically:
+
+```ocaml
+open Camlrack
+
+let function_pattern = "{lambda {SYMBOL ...} ANY ...}"
+let function_sexp_pattern = sexp_pattern_of_string_exn fucntion_pattern
+
+let is_function (se : sexp) : bool =
+    match_sexp function_sexp_pattern se
+```
+
+(Although Camlrack doesn't care what style of brackets you use when writing such
+patterns, it is customary to write patterns' lists with curly braces.)
