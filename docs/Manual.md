@@ -18,6 +18,8 @@ platform-agnostic to work for Linux or WSL.
       * [From Source](#from-source)
   * [Camlrack API](#camlrack-api)
   * [Using Camlrack](#using-camlrack)
+  * [Matching S-Expressions with
+    Patterns](#matching-s-expressions-with-patterns)
 
 
 ## Installation
