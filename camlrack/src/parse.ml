@@ -32,7 +32,7 @@ let parse_tokens_multiple (tokens : token list) : sexp list =
          (match stack with
           | ss::ss'::stack -> parse' tokens braces ((ss' @ [SExp ss])::stack)
           | _ -> List.flatten stack)
-       | _ -> failwith "unterminated S-expression")
+       | _ -> failwith "unterminated S-Expression")
     | token::tokens ->
       (match token with
        | LParen | LBrace | LBracket -> parse' tokens (token::braces) ([]::stack)
@@ -50,15 +50,13 @@ let parse_tokens_multiple (tokens : token list) : sexp list =
   parse' tokens [] [[]]
 
 let parse_tokens (tokens : token list) : sexp option =
-  match parse_tokens_multiple tokens with
-  | [] -> None
-  | [s] -> Some s
-  | _   -> failwith "found multiple parses"
+  try Some (List.hd (parse_tokens_multiple tokens))
+  with _ -> None
 
 let parse_tokens_exn (tokens : token list) : sexp =
   match parse_tokens tokens with
   | Some s -> s
-  | None -> failwith "could not parse S-expression"
+  | None -> failwith "invalid S-Expression"
 
 let parse (s : string) : sexp option = tokenize s |> parse_tokens
 

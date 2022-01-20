@@ -139,18 +139,46 @@ The `sexp_pattern` type is used for specifying such shapes:
 
     Attempts to convert a string to an [`sexp`](#sexp).
 
+    Converting atoms is straightforward:
+
     ```ocaml
-    # sexp_of_string "(one (2 3.0) \"two times two\")";;
+    # sexp_of_string "42";;
+    - : sexp option = Some (Integer 42)
+    # sexp_of_string "3.14";;
+    - : sexp option = Some (Float 3.14)
+    # sexp_of_string "\"some kind of string\"";;
+    - : sexp option = Some (String "some kind of string")
+    # sexp_of_string "foo";;
+    - : sexp option = Some (Symbol "foo")
+    ```
+
+    However, S-Expressions can also be comprised of lists which themselves
+    contain S-Expressions recursively. These lists are denoted using brackets.
+    Camlrack accepts parentheses (`(` and `)`), square brackets (`[` and `]`),
+    and curly braces (`{` and `}`). These are considered interchangeable as far
+    as Camlrack is concerned, except that they must be matched and balanced
+    correctly. For example:
+
+    ```ocaml
+    # sexp_of_string "(42 3.14 \"some string\" foo)";;
     - : sexp option =
-    Some (SExp [Symbol "one"; SExp [Integer 2; Float 3.]; String "two times two"])
-    # sexp_of_string "((one)";;
+    Some (SExp [Integer 42; Float 3.14; String "some string"; Symbol "foo"])
+    # sexp_of_string "(foo [bar baz] {qux})";;
+    - : sexp option =
+    Some
+      (SExp [Symbol "foo"; SExp [Symbol "bar"; Symbol "baz"]; SExp [Symbol "qux"]])
+    # sexp_of_string "(foo bar]";;
+    - : sexp option = None
+    # sexp_of_string "(foo bar";;
     - : sexp option = None
     ```
 
   * <a id="sexp_of_string_exn" /> `sexp_of_string_exn` : `string` &rarr;
     [`sexp`](#sexp)
 
-    Converts a string to an [`sexp`](#sexp), or else raises an exception.
+    Converts strings to [`sexp`](#sexp)s the same as
+    [`sexp_of_string`](#sexp_of_string), but raises an exception instead of
+    returning `None`.
 
     ```ocaml
     # sexp_of_string_exn "(one (2 3.0) \"two times two\")";;
