@@ -67,6 +67,18 @@ are the output received from `utop` after executing the preceding input line.
       * [Matching S-Expressions Using S-Expression
         Patterns](#matching-s-expressions-using-s-expression-patterns)
           * [`sexp_match`](#sexp_match)
+      * [Convenient Functions for Working with
+        Lists](#convenient-functions-for-working-with-lists)
+          * [`first`](#lcf_first)
+          * [`second`](#lcf_second)
+          * [`third`](#lcf_third)
+          * [`fourth`](#lcf_fourth)
+          * [`fifth`](#lcf_fifth)
+          * [`sixth`](#lcf_sixth)
+          * [`seventh`](#lcf_seventh)
+          * [`eighth`](#lcf_eighth)
+          * [`ninth`](#lcf_ninth)
+          * [`rest`](#lcf_rest)
 
 
 ## Types
@@ -459,4 +471,100 @@ The `sexp_pattern` type is used for specifying such shapes:
     - : bool = true
     # sexp_match (SPat [SYMBOL; PSymbol "..."]) (SExp [Symbol "foo"; Integer 42]);;
     - : bool = false
+    ```
+
+
+### Convenient Functions for Working with Lists
+
+Additional functions for easy manipulation of lists are defined in the
+`Camlrack.ListConvenienceFunctions` module.
+
+  * <a id="lcf_first" /> `first` : `'a list` &rarr; `'a`
+
+    Returns the first element of the given list, or else raises an exception.
+
+    ```ocaml
+    # first [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int = 1
+    ```
+
+  * <a id="lcf_second" /> `second` : `'a list` &rarr; `'a`
+
+    Returns the second element of the given list, or else raises an exception.
+
+    ```ocaml
+    # second [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int = 2
+    ```
+
+  * <a id="lcf_third" /> `third` : `'a list` &rarr; `'a`
+
+    Returns the third element of the given list, or else raises an exception.
+
+    ```ocaml
+    # third [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int = 3
+    ```
+
+  * <a id="lcf_fourth" /> `fourth` : `'a list` &rarr; `'a`
+
+    Returns the fourth element of the given list, or else raises an exception.
+
+    ```ocaml
+    # fourth [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int = 4
+    ```
+
+  * <a id="lcf_fifth" /> `fifth` : `'a list` &rarr; `'a`
+
+    Returns the fifth element of the given list, or else raises an exception.
+
+    ```ocaml
+    # fifth [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int = 5
+    ```
+
+  * <a id="lcf_sixth" /> `sixth` : `'a list` &rarr; `'a`
+
+    Returns the sixth element of the given list, or else raises an exception.
+
+    ```ocaml
+    # sixth [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int = 6
+    ```
+
+  * <a id="lcf_seventh" /> `seventh` : `'a list` &rarr; `'a`
+
+    Returns the seventh element of the given list, or else raises an exception.
+
+    ```ocaml
+    # seventh [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int = 7
+    ```
+
+  * <a id="lcf_eighth" /> `eighth` : `'a list` &rarr; `'a`
+
+    Returns the eighth element of the given list, or else raises an exception.
+
+    ```ocaml
+    # eighth [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int = 8
+    ```
+
+  * <a id="lcf_ninth" /> `ninth` : `'a list` &rarr; `'a`
+
+    Returns the ninth element of the given list, or else raises an exception.
+
+    ```ocaml
+    # ninth [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int = 9
+    ```
+
+  * <a id="lcf_rest" /> `rest` : `'a list` &rarr; `'a list`
+
+    Returns the tail of the given list, or else raises an exception.
+
+    ```ocaml
+    # rest [1; 2; 3; 4; 5; 6; 7; 8; 9; 10];;
+    - : int list = [2; 3; 4; 5; 6; 7; 8; 9; 10]
     ```
