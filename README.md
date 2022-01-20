@@ -4,10 +4,9 @@ Camlrack brings [S-Expressions](https://en.wikipedia.org/wiki/S-expression) and
 easy pattern matching for S-Expressions to OCaml like never before!
 
 
-## Installation
+## Full Manual
 
-You can install Camlrack by downloading this repository and doing `dune install`
-from the top directory.
+There is a full manual for Camlrack at [`docs/Manual.md`](docs/Manual.md).
 
 
 ## Quick Overview
