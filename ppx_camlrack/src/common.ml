@@ -59,7 +59,7 @@ let rec sexp_pat_of_pattern (p : pattern) : pattern option =
   (* If the entire pattern is one string literal, we parse that string and
      attempt to convert that S-Expression to a pattern. *)
   | Ppat_constant (Pconst_string (s, loc, _)) ->
-    (match Camlrack.sexp_of_string s with
+    (match Camlrack.sexp_of_string_opt s with
      | Some se -> Some (convert_sexp ~loc se)
      | None -> None)
   (* An or-pattern is just handled recursively. *)
@@ -109,7 +109,7 @@ let sexp_exp_of_expression (e : expression) : expression option =
   in
   match e.pexp_desc with
   | Pexp_constant (Pconst_string (s, loc, _)) ->
-    (match Camlrack.sexp_of_string s with
+    (match Camlrack.sexp_of_string_opt s with
      | Some se -> Some (convert_sexp ~loc se)
      | None -> None)
   | _ ->

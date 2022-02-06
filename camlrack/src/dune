@@ -1,4 +1,4 @@
 (library
  (public_name camlrack)
- (modules tokenTypes tokenize sexp parse sexpPatterns listConvenience match camlrack)
+ (modules errors tokenTypes tokenize sexp parse sexpPatterns listConvenience match camlrack)
  (libraries str))

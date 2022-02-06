@@ -55,7 +55,7 @@ let convert_case (c : case) : (case list) option =
   | Ppat_any -> Some [c]
   (* Constant strings are parsed and converted. *)
   | Ppat_constant (Pconst_string (s, loc, _)) ->
-    (Option.join (Camlrack.sexp_of_string s <&> Camlrack.sexp_pattern_of_sexp))
+    (Option.join (Camlrack.sexp_of_string_opt s <&> Camlrack.sexp_pattern_of_sexp))
     <&> convert_simple_pat ~loc ~rhs:c.pc_rhs fresh_groupname
   (* Anything else results in a failed conversion. *)
   (* TODO: Maybe allow other things? Assume the programmer is correct? *)
