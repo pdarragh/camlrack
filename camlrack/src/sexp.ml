@@ -1,3 +1,5 @@
+open Errors
+
 type sexp =
   | Integer of int
   | Float of float
@@ -21,12 +23,12 @@ let rec repr_string_of_sexp (se : sexp) : string =
   | Symbol s -> {|Symbol "|} ^ s ^ {|"|}
   | SExp sexps -> "SExp [" ^ String.concat "; " (List.map repr_string_of_sexp sexps) ^ "]"
 
-module Errors = struct
-  let sexp_not_a (s : string) (se : sexp) : 'a =
-    failwith ("S-Expression is not a " ^ s ^ ": " ^ render_string_of_sexp se)
-  let sexp_not_an (s : string) (se : sexp) : 'a =
-    failwith ("S-Expression is not an " ^ s ^ ": " ^ render_string_of_sexp se)
-end
+let sexp_not_err (desired_type : string) (se : sexp) : 'a =
+  let article =
+    if List.exists ((=) desired_type.[0]) ['a'; 'e'; 'i'; 'o'; 'u']
+    then "an"
+    else "a" in
+  raise (CamlrackError ("S-Expression is not " ^ article ^ " " ^ desired_type ^ ": " ^ render_string_of_sexp se))
 
 (* The following functions are based heavily (almost exactly copied) from the
    PLAIT language by Matthew Flatt:
@@ -42,7 +44,7 @@ let sexp_to_list_opt (se : sexp) : (sexp list) option =
 let sexp_to_list (se : sexp) : sexp list =
   match sexp_to_list_opt se with
   | Some ses -> ses
-  | None -> Errors.sexp_not_a "list" se
+  | None -> sexp_not_err "list" se
 
 let list_to_sexp (ses : sexp list) : sexp = SExp ses
 
@@ -54,7 +56,7 @@ let sexp_to_int_opt (se : sexp) : int option =
 let sexp_to_int (se : sexp) : int =
   match sexp_to_int_opt se with
   | Some i -> i
-  | None -> Errors.sexp_not_an "integer" se
+  | None -> sexp_not_err "integer" se
 
 let int_to_sexp (i : int) : sexp = Integer i
 
@@ -66,7 +68,7 @@ let sexp_to_float_opt (se : sexp) : float option =
 let sexp_to_float (se : sexp) : float =
   match sexp_to_float_opt se with
   | Some f -> f
-  | None -> Errors.sexp_not_a "float" se
+  | None -> sexp_not_err "float" se
 
 let float_to_sexp (f : float) : sexp = Float f
 
@@ -78,7 +80,7 @@ let sexp_to_string_opt (se : sexp) : string option =
 let sexp_to_string (se : sexp) : string =
   match sexp_to_string_opt se with
   | Some s -> s
-  | None -> Errors.sexp_not_a "string" se
+  | None -> sexp_not_err "string" se
 
 let string_to_sexp (s : string) : sexp = String s
 
@@ -90,6 +92,6 @@ let sexp_to_symbol_opt (se : sexp) : string option =
 let sexp_to_symbol (se : sexp) : string =
   match sexp_to_symbol_opt se with
   | Some s -> s
-  | None -> Errors.sexp_not_a "symbol" se
+  | None -> sexp_not_err "symbol" se
 
 let symbol_to_sexp (s : string) : sexp = Symbol s

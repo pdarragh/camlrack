@@ -1,3 +1,4 @@
+open Errors
 include TokenTypes
 
 let regexps =
@@ -38,8 +39,8 @@ let tokenize (input : string) : token list =
         (fun p c -> if fst c > fst p then c else p)
         (-1, LParen) matches in
     if length < 0
-    then failwith ("Could not lex input at position " ^ string_of_int !pos ^
-                   ", beginning with character: " ^ String.sub input !pos 1)
+    then raise (CamlrackError (("Could not lex input at position " ^ string_of_int !pos ^
+                                ", beginning with character: " ^ String.sub input !pos 1)))
     else (tokens := token::!tokens; advance length)
   done;
   List.rev !tokens
