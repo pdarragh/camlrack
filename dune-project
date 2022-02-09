@@ -18,7 +18,9 @@
  (description "'Camlrack' provides the ability to parse strings into
 S-Expressions and vice versa. It is intended to be simple and minimal, yet
 fully-featured.")
- (depends (ocaml (>= 4.12)))
+ (depends
+  (ocaml (>= 4.12))
+  (ounit2 (>= 2.2.5)))
  (tags ("S-Expressions" "parsing")))
 
 (package
@@ -29,6 +31,7 @@ transforms written S-Expressions into their Camlrack-compatible types. This
 allows for easily working with S-Expressions without extra typing.")
  (depends
   (ocaml (>= 4.12))
+  (ounit2 (>= 2.2.5))
   (ppxlib (>= 0.23.0))
   (camlrack (= version)))
  (tags ("S-Expressions" "parsing" "matching" "ppx" "extension")))

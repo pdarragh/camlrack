@@ -16,6 +16,7 @@ bug-reports: "https://github.com/pdarragh/camlrack/issues"
 depends: [
   "dune" {>= "2.9"}
   "ocaml" {>= "4.12"}
+  "ounit2" {>= "2.2.5"}
   "odoc" {with-doc}
 ]
 build: [
