@@ -26,11 +26,13 @@
 (test
  (name test_sexp)
  (modules test_sexp)
+ (package ppx_camlrack)
  (libraries camlrack)
  (preprocess (pps ppx_camlrack)))
 
 (test
  (name test_spat)
  (modules test_spat)
+ (package ppx_camlrack)
  (libraries camlrack)
  (preprocess (pps ppx_camlrack)))
