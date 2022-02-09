@@ -134,7 +134,7 @@ open Camlrack
 let sexp_string = "(some [string \"containing\" 5] atoms)"
 
 (* Then, convert the string to an S-Expression: *)
-let sexp = sexp_of_string sexp_string
+let sexp = sexp_of_string_opt sexp_string
 
 (* We could have built the same S-Expression manually like so: *)
 let manual_sexp =
