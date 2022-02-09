@@ -134,8 +134,8 @@ The `sexp_pattern` type is used for specifying such shapes:
 
 ### Parsing Strings to S-Expressions
 
-  * <a id="sexp_of_string" /> `sexp_of_string` : `string` &rarr; [`sexp`](#sexp)
-    `option`
+  * <a id="sexp_of_string" /> `sexp_of_string` : `string` &rarr;
+    ([`sexp`](#sexp), [`parse_error`](#parse_error)) `result`
 
     Attempts to convert a string to an [`sexp`](#sexp).
 
@@ -143,13 +143,13 @@ The `sexp_pattern` type is used for specifying such shapes:
 
     ```ocaml
     # sexp_of_string "42";;
-    - : sexp option = Some (Integer 42)
+    - : (sexp, Parse.parse_error) result = Ok (Integer 42)
     # sexp_of_string "3.14";;
-    - : sexp option = Some (Float 3.14)
+    - : (sexp, Parse.parse_error) result = Ok (Float 3.14)
     # sexp_of_string "\"some kind of string\"";;
-    - : sexp option = Some (String "some kind of string")
+    - : (sexp, Parse.parse_error) result = Ok (String "some kind of string")
     # sexp_of_string "foo";;
-    - : sexp option = Some (Symbol "foo")
+    - : (sexp, Parse.parse_error) result = Ok (Symbol "foo")
     ```
 
     However, S-Expressions can also be comprised of lists which themselves
@@ -161,16 +161,21 @@ The `sexp_pattern` type is used for specifying such shapes:
 
     ```ocaml
     # sexp_of_string "(42 3.14 \"some string\" foo)";;
-    - : sexp option =
-    Some (SExp [Integer 42; Float 3.14; String "some string"; Symbol "foo"])
+    - : (sexp, Parse.parse_error) result =
+    Ok (SExp [Integer 42; Float 3.14; String "some string"; Symbol "foo"])
     # sexp_of_string "(foo [bar baz] {qux})";;
-    - : sexp option =
-    Some
-      (SExp [Symbol "foo"; SExp [Symbol "bar"; Symbol "baz"]; SExp [Symbol "qux"]])
-    # sexp_of_string "(foo bar]";;
-    - : sexp option = None
+    - : (sexp, Parse.parse_error) result =
+    Ok
+     (SExp [Symbol "foo"; SExp [Symbol "bar"; Symbol "baz"]; SExp [Symbol "qux"]])
     # sexp_of_string "(foo bar";;
-    - : sexp option = None
+    - : (sexp, Parse.parse_error) result =
+    Error (Camlrack.Parse.UnterminatedSExpression "(")
+    # sexp_of_string "foo]";;
+    - : (sexp, Parse.parse_error) result =
+    Error (Camlrack.Parse.UnexpectedClosingBrace "]")
+    # sexp_of_string "(foo bar]";;
+    - : (sexp, Parse.parse_error) result =
+    Error (Camlrack.Parse.MismatchedBraces ("(", "]"))
     ```
 
   * <a id="sexp_of_string_exn" /> `sexp_of_string_exn` : `string` &rarr;
@@ -185,7 +190,24 @@ The `sexp_pattern` type is used for specifying such shapes:
     - : sexp =
     SExp [Symbol "one"; SExp [Integer 2; Float 3.]; String "two times two"]
     # sexp_of_string_exn "((one)";;
-    Exception: Failure "unterminated S-expression".
+    Exception:
+    Failure
+     "S-Expression could not be parsed because an opening brace was never terminated: (".
+    ```
+
+  * <a id="sexp_of_string_opt" /> `sexp_of_string_opt` : `string` &rarr;
+    [`sexp`](#sexp) `option`
+
+    Converts strings to [`sexp`](#sexp)s the same as
+    [`sexp_of_string`](#sexp_of_string), but wrapped in an `option` instead of
+    in a `result`.
+
+    ```ocaml
+    # sexp_of_string_opt "(another (example 2))";;
+    - : sexp option =
+    Some (SExp [Symbol "another"; SExp [Symbol "example"; Integer 2]])
+    # sexp_of_string_opt "one two)";;
+    - : sexp option = None
     ```
 
 
