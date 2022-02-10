@@ -5,11 +5,13 @@
 
 (rule
  (targets test_sexp.actual.ml)
+ (package ppx_camlrack)
  (deps (:pp pp.exe) (:input test_sexp.ml))
  (action (run ./%{pp} --impl %{input} -o %{targets})))
 
 (rule
  (targets test_spat.actual.ml)
+ (package ppx_camlrack)
  (deps (:pp pp.exe) (:input test_spat.ml))
  (action (run ./%{pp} --impl %{input} -o %{targets})))
 
@@ -25,12 +27,14 @@
 
 (test
  (name test_sexp)
+ (package ppx_camlrack)
  (modules test_sexp)
  (libraries camlrack)
  (preprocess (pps ppx_camlrack)))
 
 (test
  (name test_spat)
+ (package ppx_camlrack)
  (modules test_spat)
  (libraries camlrack)
  (preprocess (pps ppx_camlrack)))
