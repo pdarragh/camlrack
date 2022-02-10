@@ -18,7 +18,7 @@ depends: [
   "ocaml" {>= "4.12"}
   "ounit2" {with-test & >= "2.2.5"}
   "ppxlib" {>= "0.23.0"}
-  "camlrack" {= "version"}
+  "camlrack" {= version}
   "odoc" {with-doc}
 ]
 build: [
