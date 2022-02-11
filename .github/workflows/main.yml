@@ -28,8 +28,22 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
 
-      - run: opam install . --deps-only --with-test
+      - name: Install camlrack
+      - run: |
+          opam pin -yn add camlrack.dev .
+          opam install camlrack --deps-only --with-test --yes
 
-      - run: opam exec -- dune build
+      - name: Test camlrack
+      - run: |
+          opam exec -- dune build -p camlrack
+          opam exec -- dune runtest -p camlrack
 
-      - run: opam exec -- dune runtest
+      - name: Install ppx_camlrack
+      - run: |
+          opam pin -yn add ppx_camlrack.dev .
+          opam install ppx_camlrack --deps-only --with-test --yes
+
+      - name: Test ppx_camlrack
+      - run: |
+          opam exec -- dune build -p ppx_camlrack
+          opam exec -- dune runtest -p ppx_camlrack
