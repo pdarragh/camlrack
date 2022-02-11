@@ -28,20 +28,26 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
 
-      - name: Install camlrack
+      - name: Prepare opam
+        run: |
+          opam uninstall ppx_camlrack camlrack
+          opam unpin ppx_camlrack camlrack
+
+      - name: Pin packages
         run: |
           opam pin -yn add camlrack.dev .
-          opam install camlrack --deps-only --with-test --yes
+          opam pin -yn add ppx_camlrack.dev .
+
+      - name: Install camlrack dependencies
+        run: opam install camlrack --deps-only --with-test --yes
 
       - name: Test camlrack
         run: |
-          opam exec -- dune build -p camlrack
+          opam exec -- dune build -p camlrack --promote-install-files=false @install
           opam exec -- dune runtest -p camlrack
 
-      - name: Install ppx_camlrack
-        run: |
-          opam pin -yn add ppx_camlrack.dev .
-          opam install ppx_camlrack --deps-only --with-test --yes
+      - name: Install ppx_camlrack dependencies
+        run: opam install ppx_camlrack --deps-only --with-test --yes
 
       - name: Test ppx_camlrack
         run: |
