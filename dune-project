@@ -32,6 +32,6 @@ allows for easily working with S-Expressions without extra typing.")
  (depends
   (ocaml (>= 4.12))
   (ounit2 (and :with-test (>= 2.2.5)))
-  (ppxlib (>= 0.23.0))
+  (ppxlib (= 0.23.0))
   (camlrack (= :version)))
  (tags ("S-Expressions" "parsing" "matching" "ppx" "extension")))
